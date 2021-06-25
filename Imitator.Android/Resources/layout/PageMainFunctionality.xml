@@ -1,0 +1,32 @@
+﻿<android.support.design.widget.CoordinatorLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/photoforbackground">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/AppBarLayout"
+        android:theme="@style/AppTheme.AppBarOverlay">       
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/NavigationFormMainFunctionality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"   
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/navigation_menu" 
+        android:background="@android:color/transparent"/>
+
+    <FrameLayout 
+        android:id="@+id/framelayoutFormMainFunctionality"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+    />
+
+    
+</android.support.design.widget.CoordinatorLayout>
