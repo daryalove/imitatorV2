@@ -2,8 +2,8 @@
     <string name="app_name">Имитатор</string>
     <string name="project_name">SmartBoxCity</string>
   
-    <string name="title_sensors">Датчики</string>
-    <string name="title_location">Местоположение</string>
+    <string name="title_sensors_data">Датчики</string>
+    <string name="title_map">Местоположение</string>
     <string name="title_container_state">Состояние контейнера</string>
     <string name="title_photographic_recording">Фотофиксация</string>
 

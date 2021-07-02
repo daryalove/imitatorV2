@@ -80,6 +80,7 @@
         android:layout_height="200dp">
         <Button
             android:layout_width="match_parent"
+            android:id="@+id/BtnAuthorisation"
             android:layout_height="65dp"
             android:textSize="18dp"
             android:elevation="10dp"

@@ -5,28 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/photoforbackground">
-
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/AppBarLayout"
-        android:theme="@style/AppTheme.AppBarOverlay">       
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/NavigationFormMainFunctionality"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"   
-        app:labelVisibilityMode="selected"
-        app:menu="@menu/navigation_menu" 
-        android:background="@android:color/transparent"/>
-
-    <FrameLayout 
-        android:id="@+id/framelayoutFormMainFunctionality"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-    />
+        android:orientation="vertical">
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/NavigationFormMainFunctionality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"  
+            app:labelVisibilityMode="selected"
+            app:menu="@menu/navigation_menu" 
+            android:background="@android:color/transparent"/>
+        <FrameLayout 
+            android:id="@+id/framelayoutFormMainFunctionality"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+        />
+    </LinearLayout>
 
-    
 </android.support.design.widget.CoordinatorLayout>

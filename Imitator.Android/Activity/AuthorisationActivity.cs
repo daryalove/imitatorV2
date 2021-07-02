@@ -18,8 +18,8 @@ namespace Imitator.Android.Activity
         /// Конпка прехода на форму авторизации.
         /// </summary>
         private Button btn_auth_form;
-        private ViewPager _viewpager;
-        public int[] layouts;
+        //private ViewPager _viewpager;
+        //public int[] layouts;
 
 
         public override void OnCreate(Bundle savedInstanceState)
@@ -29,9 +29,22 @@ namespace Imitator.Android.Activity
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.AuthorisationPage, container, false);
+            var BtnAuthorisation = view.FindViewById<Button>(Resource.Id.BtnAuthorisation);
 
-            Intent intent = new Intent(Activity, typeof(Activity.MainActivity2));
-            StartActivity(intent);
+            BtnAuthorisation.Click += async (s, e) =>
+            {
+                try
+                {
+                    Intent intent = new Intent(Activity, typeof(Activity.ActivityMainFunctionality));
+                    StartActivity(intent);
+                }
+                catch (System.Exception ex)
+                {
+                    Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
+                }
+            };
+
+            
             //try
             //{
 
