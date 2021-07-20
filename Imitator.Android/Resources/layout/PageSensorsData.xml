@@ -1,214 +1,312 @@
-﻿<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/transparent"
-    android:padding="@dimen/edge_padding"
-    android:orientation="vertical"
-    android:paddingTop="12dp"
-    android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
+    android:background="@color/TransparentColor"
+    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView   
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="0.6">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:scaleType="center" 
-                android:src="@drawable/temperature"/>
-            <TextView
-                style="@style/TextHeader3Style"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="Температура"/>
-            <TextView
-                style="@style/TextHeader3Style"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                android:text="40.7 °C"/>
-
-        </LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/ScrollViewPageSensorsData"
+        android:layout_above="@+id/BtnSaveChangedSensorValues">
 
         <LinearLayout
-            android:layout_marginTop="25dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         
-            <com.akaita.android.circularseekbar.CircularSeekBar
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_weight="0.5"
-                android:id="@+id/SeekBarSelectedCharacteristic"
-                android:layout_centerInParent="true"
-                app:enabled="true"
-                app:innerCircleColor="@android:color/transparent"
-                app:min="0"
-                app:max="100"
-                app:progress="0"
-                app:progressTextColor="#002965"
-                app:progressTextSize="25"
-                app:ringColor="#bdbdbd"
-                app:ringWidth="0.5"
-                app:showIndicator="true"
-                app:showProgressText="true"
-                app:speedMultiplier="2"/>
-
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.5"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_margin="4dp">
+            
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+            
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="left"
+                        android:layout_margin="5dp"
+                        android:scaleType="center" 
+                        android:id="@+id/SelectedSensorImage"/>
+                
+                    <TextView
+                        android:layout_centerInParent="true"
+                        android:id="@+id/SelectedSensorName"
+                        style="@style/TextHeader3Style"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Вес"/>
+
+                    <TextView
+                        style="@style/TextHeader3Style"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:id="@+id/SelectedSensorValue"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10 кг"/>
+
+                </LinearLayout>
+                           
+                <RelativeLayout
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            
+                     <com.akaita.android.circularseekbar.CircularSeekBar      
+                        android:isScrollContainer="false"
+                        android:scrollbars="none"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/SeekBarSelectedCharacteristic"
+                        app:enabled="true"
+                        app:innerCircleColor="@color/TransparentColor"
+                        app:min="0"
+                        app:max="100"
+                        app:progress="0"
+                        app:progressTextColor="@color/TextColor"
+                        app:progressTextSize="25"
+                        app:ringColor="@color/BackgroundColor"
+                        app:ringWidth="0.5"
+                        app:showIndicator="true"
+                        app:showInnerCircle="true"
+                        app:showProgressText="true"
+                        app:speedMultiplier="2"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+                   
+                        <Button
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/BtnReduceSensorValue"
+                            android:textSize="@dimen/BaseTextSize"
+                            android:textColor="@color/TextColor"
+                            android:text="-"
+                            android:background="@drawable/ChangingSensorValuesButtonStyle"
+                            android:layout_margin="10dp"/>
         
-                <Button
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.5"
-                    android:id="@+id/BtnIncreaseSensorValue"           
-                    android:textSize="18dp"
-                    android:elevation="10dp"
-                    android:textColor="#f5f5f5"
-                    android:text="+"
-                    android:background="@drawable/ChangingSensorValuesButtonStyle"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="top"/>
-                <Button
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.5"
-                    android:id="@+id/BtnReduceSensorValue"
-                    android:textSize="18dp"
-                    android:elevation="10dp"
-                    android:textColor="#f5f5f5"
-                    android:text="-"
-                    android:background="@drawable/ChangingSensorValuesButtonStyle"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="top"/>
-        
+                        <Button
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/BtnIncreaseSensorValue"           
+                            android:textSize="@dimen/BaseTextSize"
+                            android:textColor="@color/TextColor"
+                            android:text="+"
+                            android:background="@drawable/ChangingSensorValuesButtonStyle"
+                            android:layout_margin="10dp"/>
+                    </LinearLayout>
+
+                </RelativeLayout>          
+
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="15dp">   
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/TextSensorList"
+                    android:gravity="left"
+                    android:text="Выбор датчика"
+                    style="@style/TextHeader3Style"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_below="@+id/TextSensorList"
+                    android:background="@color/TextColor"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/TransparentColor"
+                    android:padding="5dp"
+                    android:id="@+id/HorizontalScrollViewSensorsList"
+                    android:layout_below = "@+id/TextSensorList">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:orientation = "horizontal">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/WidthForLinearLayoutSensorList"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:id="@+id/SensorWeightLinearLayout"
+                            android:orientation = "vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Вес"
+                                android:id="@+id/SensorWeightText"
+                                style="@style/TextSensorsStyle"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10 кг"
+                                android:id="@+id/SensorWeightValue"
+                                style="@style/TextSensorsStyle"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="@dimen/WidthForLinearLayoutSensorList"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SensorTemperatureLinearLayout"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation = "vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Температура"
+                                android:id="@+id/SensorTemperatureText"
+                                style="@style/TextSensorsStyle"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10 °C"
+                                android:id="@+id/SensorTemperatureValue"
+                                style="@style/TextSensorsStyle"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="@dimen/WidthForLinearLayoutSensorList"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SensorHumidityLinearLayout"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation = "vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Влажность"
+                                android:id="@+id/SensorHumidityText"
+                                style="@style/TextSensorsStyle"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10 %"
+                                android:id="@+id/SensorHumidityValue"
+                                style="@style/TextSensorsStyle"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="@dimen/WidthForLinearLayoutSensorList"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SensorIlluminationLinearLayout"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation = "vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Освещённость"
+                                android:id="@+id/SensorIlluminationText"
+                                style="@style/TextSensorsStyle"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10 лм"
+                                android:id="@+id/SensorIlluminationValue"
+                                style="@style/TextSensorsStyle"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="@dimen/WidthForLinearLayoutSensorList"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SensorBatteryLinearLayout"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation = "vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Батарея"
+                                android:id="@+id/SensorBatteryText"
+                                style="@style/TextSensorsStyle"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10 %"
+                                android:id="@+id/SensorBatteryValue"
+                                style="@style/TextSensorsStyle"/>
+                        </LinearLayout>                           
+                                           
+                    </LinearLayout>
+                </HorizontalScrollView>
+             
+            </RelativeLayout>
         
-        </LinearLayout>
-                             
-    </LinearLayout>
+        </LinearLayout>      
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:padding = "5dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation = "horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation = "vertical">
-                    <TextView
-                        android:text="Батарея, %"
-                        style="@style/TextSensorsStyle"
-                        android:textSize="15dp"/>
-                    <TextView
-                        android:text="10"
-                        android:textSize="13dp"
-                        style="@style/TextSensorsStyle"
-                        android:id="@+id/BatteryValue"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft = "14dp"
-                    android:orientation = "vertical">
-                    <TextView
-                        android:text="Вес, кг"
-                        style="@style/TextSensorsStyle"
-                        android:textSize="15dp"/>
-                    <TextView
-                        android:text="10"
-                        android:textSize="13dp"
-                        style="@style/TextSensorsStyle"
-                        android:id="@+id/WeightValue" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft = "14dp"
-                    android:orientation = "vertical">
-                    <TextView
-                        android:text="Температура, C°"
-                        style="@style/TextSensorsStyle"
-                        android:textSize="15dp"/>
-                    <TextView
-                        android:text="10"
-                        android:textSize="13dp"
-                        style="@style/TextSensorsStyle"
-                        android:id="@+id/TemperatureValue" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft = "14dp"
-                    android:orientation = "vertical">
-                    <TextView
-                        android:text="Влажность, %"
-                        style="@style/TextSensorsStyle"
-                        android:textSize="15dp"/>
-                    <TextView                                  
-                        android:text="10"
-                        android:textSize="13dp"
-                        style="@style/TextSensorsStyle"
-                        android:id="@+id/HumidityValue" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft = "14dp"
-                    android:orientation = "vertical">
-                    <TextView
-                        android:text="Освещенность, лм"
-                        style="@style/TextSensorsStyle"
-                        android:textSize="15dp" />
-                    <TextView
-                        android:text="10"
-                        android:textSize="13dp"
-                        style="@style/TextSensorsStyle"
-                        android:id="@+id/IlluminationValue" />
-                </LinearLayout>                   
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:textSize="18dp"
-        android:elevation="10dp"
-        android:textColor="#fafafa"
-        android:text="Сохранить"
-        android:background="@drawable/ButtonStyle"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_gravity="bottom"/>
+    </ScrollView>   
     
-</LinearLayout>
+     <Button
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:maxHeight="@dimen/BaseTextSize"
+        android:layout_height="@dimen/ButtonHeight"
+        android:textSize="@dimen/BaseTextSize"                  
+        android:textColor="@color/TextColor"
+        android:text="Сохранить"
+        android:id="@+id/BtnSaveChangedSensorValues"
+        android:background="@drawable/ButtonStyle"/> 
+
+                  
+</RelativeLayout>

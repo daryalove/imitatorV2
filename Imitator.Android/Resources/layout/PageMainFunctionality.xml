@@ -5,17 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/photoforbackground">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <android.support.design.widget.BottomNavigationView
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.design.widget.BottomNavigationView            
             android:id="@+id/NavigationFormMainFunctionality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"  
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            app:itemTextColor="@color/TextColor"
+            app:itemIconTint="@color/TextColor"
             app:labelVisibilityMode="selected"
             app:menu="@menu/navigation_menu" 
-            android:background="@android:color/transparent"/>
+            android:background="@color/TransparentColor"/>
+
         <FrameLayout 
             android:id="@+id/framelayoutFormMainFunctionality"
             android:layout_height="match_parent"

@@ -2,10 +2,162 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/transparent"
-    android:padding="@dimen/edge_padding"
+    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/BtnSaveChangedContainerState"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/ScrollViewPageContainerState">
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/LinearLayoutContainerPosition"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="30dp"
+                    android:gravity="left"
+                    android:text="Положение"
+                    style="@style/TextHeader3Style"/>
+                <Spinner
+                    android:id="@+id/SpinnerContainerPosition"
+                    android:gravity = "center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:entries="@array/ArrayContainerPosition"
+                    android:background = "@drawable/EditTextStyle"
+                    android:inputType="text"
+                    android:spinnerMode="dialog"/>
+
+            </LinearLayout>  
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/LinearLayoutContainerPosition"
+                android:id="@+id/LinearLayoutContainerDoorState"
+                android:orientation="horizontal">
     
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Контейнер"
+                            style="@style/TextHeader3Style"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="20dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Разложен"
+                            android:id="@+id/TextContainerState"
+                            style="@style/TextSensorsStyle"/>
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:layout_marginTop="25dp"
+                        android:layout_gravity="center"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/BtnChangeContainerState"
+                        android:background="@drawable/ChangingSensorValuesButtonStyle"
+                        android:src="@drawable/change"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Дверь"
+                            style="@style/TextHeader3Style"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="20dp"
+                            android:gravity="center"
+                            android:text="Открыта"
+                            android:id="@+id/TextDoorState"
+                            style="@style/TextSensorsStyle"/>
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:layout_marginTop="25dp"
+                        android:layout_gravity="center"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/BtnChangeDoorState"
+                        android:background="@drawable/ChangingSensorValuesButtonStyle"
+                        android:src="@drawable/change"/>
+
+                </LinearLayout>
+    
+            </LinearLayout>
+
+            <ImageView
+                android:layout_below="@+id/LinearLayoutContainerDoorState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/ImageContainerDoorState"
+                android:scaleType="centerCrop"
+                android:src="@drawable/OpenDoor"/>                 
+
+        </RelativeLayout>        
+            
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="@dimen/ButtonHeight"
+        android:textSize="@dimen/BaseTextSize"                  
+        android:textColor="@color/TextColor"
+        android:text="Сохранить"
+        android:id="@+id/BtnSaveChangedContainerState"
+        android:background="@drawable/ButtonStyle"/> 
+
 </RelativeLayout>

@@ -21,22 +21,36 @@
             android:text="@string/project_name"/>
     </LinearLayout>
     <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="0.5">
-        <Button
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="0.5">
+         <Button
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:textSize="18dp"
-            android:elevation="10dp"
-            android:textColor="#fafafa"
-            android:id="@+id/BtnOpenAuthorisationPage"
-            android:text="@string/BtnComeIn"
+            android:layout_height="@dimen/ButtonHeight"
+            android:textSize="@dimen/BaseTextSize"
+            android:textColor="@color/TextColor"
+            android:id="@+id/BtnOpenRegistrationPage"
+            android:text="@string/BtnRegistration"
             android:background="@drawable/ButtonStyle"
+            android:textAllCaps="false"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_horizontal"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ButtonHeight"
+            android:textSize="@dimen/BaseTextSize"
+            android:textColor="@color/TextColor"
+            android:id="@+id/BtnOpenAuthorisationPage"
+            android:text="@string/BtnComeIn"
+            android:background="@drawable/ButtonStyle"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 </LinearLayout>

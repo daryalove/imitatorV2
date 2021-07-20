@@ -1,0 +1,112 @@
+﻿<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/photoforbackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        
+            <TextView
+              android:gravity="center_horizontal"
+              android:layout_alignParentTop="true"
+              android:layout_marginTop="10dp"
+              android:id="@+id/TxtAppName"
+              style="@style/TextHeaderStyle"
+              android:text="@string/project_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"/>
+             <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_below="@+id/TxtAppName"
+                android:background="@color/ViewColor"/>
+
+             <TextView
+                android:gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:textSize="35dp"
+                android:textColor="@color/TextColor"
+                android:layout_below="@+id/TxtAppName"
+                android:id="@+id/TxtRegistration"
+                android:text="Регистрация"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:id="@+id/LinearLayoutFragment"
+                android:layout_below="@+id/TxtRegistration">
+            
+                 <FrameLayout 
+                    android:id="@+id/FrameLayoutRegistration"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                />
+
+            </LinearLayout>
+ 
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LinearLayoutFragment"
+                android:layout_marginBottom="40dp"
+                android:id="@+id/LinearLayoutChangeRegistrationType"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:orientation="horizontal">
+            
+                <Button      
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:id="@+id/BtnRegistrationFingerprint"
+                    android:layout_height="45dp"
+                    android:textAllCaps="false"
+                    android:text="Отпечаток"
+                    android:textSize="@dimen/BaseTextSize"
+                    android:textColor="@color/TextColor"
+                    android:background="@drawable/ChangeAuthTypeLeftPart"/>
+                <Button      
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:id="@+id/BtnRegistrationLoginPassword"
+                    android:layout_height="45dp"
+                    android:textAllCaps="false"
+                    android:text="Логин/Пароль"
+                    android:textSize="@dimen/BaseTextSize"
+                    android:textColor="@color/TextColor"
+                    android:background="@drawable/ChangeAuthTypeRightPart"/>
+             </LinearLayout>
+        
+            <Button      
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/LinearLayoutChangeRegistrationType"
+                android:layout_width="match_parent"
+                android:id="@+id/BtnRegistration"
+                android:layout_height="@dimen/ButtonHeight"
+                android:textSize="@dimen/BaseTextSize"
+                android:textColor="@color/TextColor"
+                android:textAllCaps="false"
+                android:text="Сохранить"
+                android:background="@drawable/ButtonStyle"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center_vertical"/>
+
+        </RelativeLayout>
+    
+    </ScrollView>  
+    
+</RelativeLayout>

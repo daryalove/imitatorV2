@@ -1,11 +1,29 @@
-﻿<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<Cheesebaron.SlidingUpPanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/transparent"
-    android:padding="@dimen/edge_padding"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="bottom">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/FragmentMapUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop = "10dp"                       
+            class="com.google.android.gms.maps.MapFragment"/>
+    </RelativeLayout>
 
-    
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        android:text="bbbbbbb"/>
+    </RelativeLayout>
+</Cheesebaron.SlidingUpPanel.SlidingUpPanelLayout>

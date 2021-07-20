@@ -9,65 +9,153 @@ using Android.Views;
 using Android.Widget;
 using Android.Support.V4.View;
 using Android.OS;
+using Android.Support.V7.App;
+using Android.Graphics.Drawables;
+using Android.Support.V4.Content;
 
 namespace Imitator.Android.Activity
 {
-    public class AuthorisationActivity : Fragment
+    [Activity(Label = "AuthorisationActivity")]
+    public class AuthorisationActivity : AppCompatActivity
     {
-        /// <summary>
-        /// Конпка прехода на форму авторизации.
-        /// </summary>
-        private Button btn_auth_form;
-        //private ViewPager _viewpager;
-        //public int[] layouts;
+        private TextView AuthorisationTypeText;
+        private Button BtnAuthorisationFingerprint;
+        private Button BtnAuthorisationLoginPassword;
+        private Button BtnAuthorisation;
 
-
-        public override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-        }
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            var view = inflater.Inflate(Resource.Layout.AuthorisationPage, container, false);
-            var BtnAuthorisation = view.FindViewById<Button>(Resource.Id.BtnAuthorisation);
+
+            SetContentView(Resource.Layout.AuthorisationPage);
+
+            AuthorisationTypeText = FindViewById<TextView>(Resource.Id.AuthorisationTypeText);
+            BtnAuthorisationFingerprint = FindViewById<Button>(Resource.Id.BtnAuthorisationFingerprint);
+            BtnAuthorisationLoginPassword = FindViewById<Button>(Resource.Id.BtnAuthorisationLoginPassword);
+            BtnAuthorisation = FindViewById<Button>(Resource.Id.BtnAuthorisation);
+
+            // Эти переменные необходимы для изменения цвета кнопок BtnAuthorisationFingerprint и BtnAuthorisationLoginPassword.
+            // А точнее для изменения свойства <solid ... /> в стилях ChangeAuthTypeLeftPart и ChangeAuthTypeRightPart(drawable)
+            Drawable FingerprintBackground = BtnAuthorisationFingerprint.Background;
+            Drawable LoginPasswordBackground = BtnAuthorisationLoginPassword.Background;
+
+            GradientDrawable FingerprintGradient = (GradientDrawable)FingerprintBackground;
+            GradientDrawable LoginPasswordGradient = (GradientDrawable)LoginPasswordBackground;
+
+
+            FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+
+            AuthFingerprintActivity Fingerprint = new AuthFingerprintActivity();
+            transaction.Replace(Resource.Id.FrameLayoutAuthorisation, Fingerprint);
+            transaction.Commit();
+
+            LoginPasswordGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.NotActivPageColor));
+            FingerprintGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.BackgroundColor));
+
+            BtnAuthorisationFingerprint.Click += async (s, e) =>
+            {
+                try
+                {
+                    FragmentTransaction TFingerprint = this.FragmentManager.BeginTransaction();
+                    AuthFingerprintActivity Fingerprint = new AuthFingerprintActivity();
+                    TFingerprint.Replace(Resource.Id.FrameLayoutAuthorisation, Fingerprint);
+                    TFingerprint.Commit();
+                    AuthorisationTypeText.Text = "Укажите отпечаток пальца";
+                    FingerprintGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.BackgroundColor));
+                    LoginPasswordGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.NotActivPageColor));
+                }
+                catch (System.Exception ex)
+                {
+                    Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+                }            
+            };
+
+            BtnAuthorisationLoginPassword.Click += async (s, e) =>
+            {
+                try
+                {
+                    FragmentTransaction TLoginPassword = this.FragmentManager.BeginTransaction();
+                    AuthLoginPasswordActivity LoginPassword = new AuthLoginPasswordActivity();
+                    TLoginPassword.Replace(Resource.Id.FrameLayoutAuthorisation, LoginPassword);
+                    TLoginPassword.Commit();
+
+                    AuthorisationTypeText.Text = "Введите логин и пароль";
+                    FingerprintGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.NotActivPageColor));
+                    LoginPasswordGradient.SetColor(ContextCompat.GetColor(this, Resource.Color.BackgroundColor));
+                }
+                catch (System.Exception ex)
+                {
+                    Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+                }
+            };
 
             BtnAuthorisation.Click += async (s, e) =>
             {
                 try
                 {
-                    Intent intent = new Intent(Activity, typeof(Activity.ActivityMainFunctionality));
+                    Intent intent = new Intent(this, typeof(Activity.ActivityMainFunctionality));
                     StartActivity(intent);
                 }
                 catch (System.Exception ex)
                 {
-                    Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
+                    Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
                 }
             };
+        }
+
+        /// <summary>
+        /// Конпка прехода на форму авторизации.
+        /// </summary>
+        //private ViewPager _viewpager;
+        //public int[] layouts;
+
+
+        //public override void OnCreate(Bundle savedInstanceState)
+        //{
+        //    base.OnCreate(savedInstanceState);
+        //}
+        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        //{
+        //    var view = inflater.Inflate(Resource.Layout.AuthorisationPage, container, false);
+        //    var BtnAuthorisation = view.FindViewById<Button>(Resource.Id.BtnAuthorisation);
+
+        //    BtnAuthorisation.Click += async (s, e) =>
+        //    {
+        //        try
+        //        {
+        //            Intent intent = new Intent(Activity, typeof(Activity.ActivityMainFunctionality));
+        //            StartActivity(intent);
+        //        }
+        //        catch (System.Exception ex)
+        //        {
+        //            Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
+        //        }
+        //    };
 
             
-            //try
-            //{
+        //    //try
+        //    //{
 
-            //    layouts = new int[]
-            //    {
-            //         Resource.Layout.AuthorisationLoginPassword,
-            //         Resource.Layout.AuthorisationFingerprint
-            //    };
+        //    //    layouts = new int[]
+        //    //    {
+        //    //         Resource.Layout.AuthorisationLoginPassword,
+        //    //         Resource.Layout.AuthorisationFingerprint
+        //    //    };
 
-            //    _viewpager = view.FindViewById<ViewPager>(Resource.Id.viewPager);
+        //    //    _viewpager = view.FindViewById<ViewPager>(Resource.Id.viewPager);
 
-            //    FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
-            //    ViewPagerAdapter adapter = new ViewPagerAdapter(layouts, ref transaction);
-            //    _viewpager.Adapter = adapter;
+        //    //    FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+        //    //    ViewPagerAdapter adapter = new ViewPagerAdapter(layouts, ref transaction);
+        //    //    _viewpager.Adapter = adapter;
 
-            //    //_viewpager.PageSelected += ViewPager_PageSelected;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Toast.MakeText(Activity, "" + ex.Message, ToastLength.Long).Show();
-            //}
-            return view;
-        }
+        //    //    //_viewpager.PageSelected += ViewPager_PageSelected;
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Toast.MakeText(Activity, "" + ex.Message, ToastLength.Long).Show();
+        //    //}
+        //    return view;
+        //}
     }
 
     //public class ViewPagerAdapter : PagerAdapter

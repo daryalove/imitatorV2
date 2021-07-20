@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+        android:id="@+id/navigation_appBar_PersonalData"
+        android:icon="@android:drawable/ic_menu_info_details"  
+        android:showAsAction="ifRoom"
+        android:title="@string/title_PersonalData"/>
+
+    <item
+        android:id="@+id/navigation_appBar_Exit"
+         android:showAsAction="never"
+        android:title="@string/title_Exit" />
+</menu>

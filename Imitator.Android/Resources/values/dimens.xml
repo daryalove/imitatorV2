@@ -12,5 +12,12 @@
     <dimen name="txt_normal_size">18sp</dimen>-->
 
 	<dimen name="edge_padding">4dp</dimen>
-
+	<dimen name="BaseTextSize">18dp</dimen>
+	<dimen name="CapitalTextSize">25dp</dimen>
+	<dimen name="InTableTextSize">14dp</dimen>
+	<dimen name="ButtonHeight">55dp</dimen>
+	<dimen name="EditTextHeight">40dp</dimen>
+	<dimen name="LeftRightMarginForEditText">20dp</dimen>
+	<dimen name="WidthHeightForSwitch">35dp</dimen>
+	<dimen name="WidthForLinearLayoutSensorList">140dp</dimen>
 </resources>

@@ -4,90 +4,122 @@
     android:background="@drawable/photoforbackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="220dp">
-        <TextView
-            android:gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
-            style="@style/TextHeaderStyle"
-            android:text="@string/project_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
-     <LinearLayout
-        android:orientation="vertical"
-       android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="250dp">
-        <TextView
-             style="@style/TextHeader2Style"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="40dp"
-            android:text="Логин"/>
 
-        <EditText
-            android:id="@+id/UserLogin"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:textColor="#f5f5f5"
-            android:elevation="8dp"
-            android:padding="10dp"
-            android:background="@drawable/EditTextStyle"
-            android:inputType="textEmailAddress"/>
-
-        <TextView
-            style="@style/TextHeader2Style"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="40dp"
-            android:text="Пароль"/>
-        <EditText
-            android:id="@+id/UserPassword"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:textColor="#f5f5f5"
-            android:elevation="8dp"
-            android:padding="10dp"
-            android:background="@drawable/EditTextStyle"
-            android:inputType="textPassword"/>
-
-        <CheckBox
-            android:id="@+id/CheckBoxRememberData"
-            android:theme="@style/MyCheckBox"
-            android:textColor="#f5f5f5"
-            android:text="Запомнить данные"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-      
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
+     <ScrollView
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="200dp">
-        <Button
+        android:layout_height="match_parent">
+    
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:id="@+id/BtnAuthorisation"
-            android:layout_height="65dp"
-            android:textSize="18dp"
-            android:elevation="10dp"
-            android:textColor="#fafafa"
-            android:text="Войти"
-            android:background="@drawable/ButtonStyle"
-            android:layout_margin="10dp"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:id="@+id/TxtAppName"
+                style="@style/TextHeaderStyle"
+                android:text="@string/project_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_below="@+id/TxtAppName"
+                android:background="@color/ViewColor"/>
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:textSize="35dp"
+                android:textColor="@color/TextColor"
+                android:layout_below="@+id/TxtAppName"
+                android:id="@+id/TxtAuthorisation"
+                android:text="Авторизация"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/TxtAuthorisation"
+                android:id="@+id/AuthorisationTypeText"
+                android:textColor="@color/TextColor"
+                android:textSize="18dp"
+                android:text="Укажите отпечаток пальца"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:id="@+id/LinearLayoutFragment"
+                android:layout_below="@+id/AuthorisationTypeText">
+            
+                <FrameLayout 
+                    android:id="@+id/FrameLayoutAuthorisation"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                />
+
+            </LinearLayout>
+ 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LinearLayoutFragment"
+                android:layout_marginBottom="40dp"
+                android:id="@+id/LinearLayoutChangeAuthType"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:orientation="horizontal">
+            
+                <Button      
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:id="@+id/BtnAuthorisationFingerprint"
+                    android:layout_height="45dp"
+                    android:textAllCaps="false"
+                    android:text="Отпечаток"
+                    android:textSize="@dimen/BaseTextSize"
+                    android:textColor="@color/TextColor"
+                    android:background="@drawable/ChangeAuthTypeLeftPart"/>
+                <Button      
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:id="@+id/BtnAuthorisationLoginPassword"
+                    android:layout_height="45dp"
+                    android:textAllCaps="false"
+                    android:text="Логин/Пароль"
+                    android:textSize="@dimen/BaseTextSize"
+                    android:textColor="@color/TextColor"
+                    android:background="@drawable/ChangeAuthTypeRightPart"/>
+             </LinearLayout>
+
+             <Button      
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/LinearLayoutChangeAuthType"
+                android:layout_width="match_parent"
+                android:id="@+id/BtnAuthorisation"
+                android:layout_height="@dimen/ButtonHeight"
+                android:textSize="@dimen/BaseTextSize"
+                android:textColor="@color/TextColor"
+                android:textAllCaps="false"
+                android:text="Войти"
+                android:background="@drawable/ButtonStyle"
+                android:elevation="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center_vertical"/>
+            
+        </RelativeLayout>
+    
+    </ScrollView>
+
+
 </RelativeLayout>

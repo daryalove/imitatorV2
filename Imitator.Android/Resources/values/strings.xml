@@ -6,8 +6,18 @@
     <string name="title_map">Местоположение</string>
     <string name="title_container_state">Состояние контейнера</string>
     <string name="title_photographic_recording">Фотофиксация</string>
+	<string name="title_more">Ещё</string>
+	<string name="title_PersonalData">Личные данные</string>
+	<string name="title_Exit">Выход</string>
 
-    <string name="action_settings">Settings</string>
+	<string-array name="ArrayContainerPosition">
+		<item>На складе</item>
+		<item>На автомобиле</item>
+		<item>У заказчика</item>
+	</string-array>
 
+	<string name="action_settings">Settings</string>
+
+	<string name="BtnRegistration">Регистрация</string>
     <string name="BtnComeIn">Войти</string>
 </resources>
