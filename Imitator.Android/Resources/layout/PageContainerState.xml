@@ -78,7 +78,6 @@
                             android:paddingTop="20dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="Разложен"
                             android:id="@+id/TextContainerState"
                             style="@style/TextSensorsStyle"/>
 
@@ -117,7 +116,6 @@
                             android:layout_weight="1"
                             android:paddingTop="20dp"
                             android:gravity="center"
-                            android:text="Открыта"
                             android:id="@+id/TextDoorState"
                             style="@style/TextSensorsStyle"/>
 

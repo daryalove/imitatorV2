@@ -7,6 +7,11 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Imitator.Android.Activity.MainFunctionality;
 using Imitator.Android.Activity.PersonalData;
+using Imitator.CommonData.DataModels;
+using Imitator.WebServices;
+using Imitator.WebServices.Account;
+using System;
+using System.Threading.Tasks;
 using AlertDialog = Android.App.AlertDialog;
 using Toast = Android.Widget.Toast;
 using ToastLength = Android.Widget.ToastLength;
@@ -100,18 +105,23 @@ namespace Imitator.Android.Activity
                         this.Finish();
                         return true;
                     }
+                case Resource.Id.navigation_appBar_Alarm:
+                    {
+                        FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+                        ActivitySetCancelAlarm AlarmFragment = new ActivitySetCancelAlarm();
+                        transaction.Replace(Resource.Id.framelayoutFormMainFunctionality, AlarmFragment).AddToBackStack(null).Commit();
+                        return true;
+                    }
                 case Resource.Id.navigation_appBar_Exit:
                     {
                         AlertDialog.Builder alert = new AlertDialog.Builder(this);
                         alert.SetTitle("Внимание!");
                         alert.SetMessage("Вы действительно хотите выйти со своего профиля ?");
-                        alert.SetPositiveButton("Да", (senderAlert, args) =>
+                        alert.SetPositiveButton("Да", ( senderAlert, args) =>
                         {
                             try
                             {
-                                Intent Auth = new Intent(this, typeof(MainActivity));
-                                StartActivity(Auth);
-                                this.Finish();
+                                LogOutMethod();                                  
                             }
                             catch (System.Exception ex)
                             {
@@ -128,6 +138,26 @@ namespace Imitator.Android.Activity
             }
 
             return base.OnOptionsItemSelected(item);
+        }
+
+        private async void LogOutMethod()
+        {
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
+            {
+                AuthService.InitializeClient(client);
+                var o_data = await AuthService.LogOut();
+
+                if (o_data.Result.ToString() == "OK")
+                {
+                    Intent page = new Intent(this, typeof(MainActivity));
+                    StartActivity(page);
+                    this.Finish();
+                }
+                else
+                {
+                    Toast.MakeText(this, "Не удалось выйти из профиля. Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                }                  
+            }
         }
 
         //public interface IBackButtonListener

@@ -4,6 +4,8 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:text="Нажмите на кнопку, чтобы установить/поменять отпечаток пальца"/>
+        android:text="Выберите действие, чтобы изменить доступ к авторизации с помощью отпечатка пальца."/>
 
 
     <ImageButton        
@@ -24,14 +26,15 @@
         android:src="@drawable/FingerprintImage"/>
 
      <TextView
+        android:id="@+id/TextAccessFingerprintAuthorisation"
         style="@style/TextHeader2Style"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:textColor="@color/BackgroundColor"
-        android:text="Отпечаток пальца установлен"/>
+        android:textColor="@color/EventNotAllowColor"
+        android:text="Авторизация с помощью отпечатка пальца запрещена"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +48,7 @@
             android:layout_width="wrap_content"
             android:gravity="left"
             android:layout_marginLeft="@dimen/LeftRightMarginForEditText"
-            android:text="Изменить данные"/>
+            android:text="Разрешить"/>
     
         <androidx.appcompat.widget.SwitchCompat
             android:layout_weight="1"
@@ -53,7 +56,7 @@
             android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"    
-            android:id="@+id/SWSaveChangedPersonalDataFingerprint"
+            android:id="@+id/ChangeAccessFingerprintAuthorisation"
             android:thumb="@drawable/SwitchThumb"
             app:track="@drawable/switchtrack"
             android:textSize="@dimen/BaseTextSize"

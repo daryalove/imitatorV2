@@ -5,8 +5,8 @@ using Android.Widget;
 using Android.Support.V7.App;
 using Android.Content;
 using Android.Runtime;
+using Imitator.Android.Activity.Authorisation;
 using Imitator.Android.Activity.Registration;
-using Android.Support.Design.Widget;
 
 namespace Imitator.Android
 {
@@ -47,7 +47,7 @@ namespace Imitator.Android
             {
                 try
                 {
-                    Intent Auth = new Intent(this, typeof(Activity.AuthorisationActivity));
+                    Intent Auth = new Intent(this, typeof(AuthorisationActivity));
                     StartActivity(Auth);
                     this.Finish();
                 }

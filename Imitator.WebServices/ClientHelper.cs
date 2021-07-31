@@ -9,7 +9,7 @@ namespace Imitator.WebServices
 {
     public class ClientHelper
     {
-        public const string URL = "http://smartboxcity.ru:8003/";
+        public const string URL = "https://iot.tmc-centert.ru/api/imitator/";
 
         public static HttpClient GetClient()
         {
@@ -35,7 +35,7 @@ namespace Imitator.WebServices
             //};
 
             //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
-            var authValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
+            var authValue = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
 
             var client = new HttpClient()
             {
@@ -57,7 +57,7 @@ namespace Imitator.WebServices
             //};
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
-            var authValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{CrossSettings.Current.GetValueOrDefault("token", "")}:")));
+            var authValue = new AuthenticationHeaderValue("Bearer", token/*Convert.ToBase64String(Encoding.UTF8.GetBytes($"{CrossSettings.Current.GetValueOrDefault("token", "")}:"))*/);
 
             var client = new HttpClient()
             {

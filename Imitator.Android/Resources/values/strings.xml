@@ -8,6 +8,7 @@
     <string name="title_photographic_recording">Фотофиксация</string>
 	<string name="title_more">Ещё</string>
 	<string name="title_PersonalData">Личные данные</string>
+	<string name="title_Alarms">Тревоги</string>
 	<string name="title_Exit">Выход</string>
 
 	<string-array name="ArrayContainerPosition">

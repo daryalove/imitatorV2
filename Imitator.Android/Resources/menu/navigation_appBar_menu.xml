@@ -2,12 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item 
         android:id="@+id/navigation_appBar_PersonalData"
-        android:icon="@android:drawable/ic_menu_info_details"  
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/title_PersonalData"/>
-
+	<item
+	    android:id="@+id/navigation_appBar_Alarm"
+	    android:showAsAction="never"
+	    android:title="@string/title_Alarms" />
     <item
         android:id="@+id/navigation_appBar_Exit"
-         android:showAsAction="never"
+        android:showAsAction="never"
         android:title="@string/title_Exit" />
 </menu>

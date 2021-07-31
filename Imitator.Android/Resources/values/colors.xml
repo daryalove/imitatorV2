@@ -5,6 +5,7 @@
     <color name="colorAccent">#3498db</color>
 	<color name="BackgroundColor">#2E8B57</color>
 	<color name="StrokeColor">#2E8B57</color>
+	<color name="EventNotAllowColor">#c22121</color>
 	<color name="NotActivPageColor">#7f8280</color>	
 	<color name="TextColor">#e6e9f0</color>
 	<color name="TransparentColor">@android:color/transparent</color>

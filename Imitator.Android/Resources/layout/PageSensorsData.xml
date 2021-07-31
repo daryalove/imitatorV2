@@ -182,14 +182,21 @@
                                 android:layout_weight="1"
                                 android:text="Вес"
                                 android:id="@+id/SensorWeightText"
-                                style="@style/TextSensorsStyle"/>
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:textSize="@dimen/BaseTextSize"
+                                android:textStyle="normal"
+                                android:textColor="@color/TextColor"/>
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="10 кг"
                                 android:id="@+id/SensorWeightValue"
-                                style="@style/TextSensorsStyle"/>
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:textSize="@dimen/BaseTextSize"
+                                android:textStyle="normal"
+                                android:textColor="@color/TextColor"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="@dimen/WidthForLinearLayoutSensorList"
@@ -211,7 +218,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="10 °C"
                                 android:id="@+id/SensorTemperatureValue"
                                 style="@style/TextSensorsStyle"/>
                         </LinearLayout>
@@ -235,7 +241,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="10 %"
                                 android:id="@+id/SensorHumidityValue"
                                 style="@style/TextSensorsStyle"/>
                         </LinearLayout>
@@ -259,7 +264,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="10 лм"
                                 android:id="@+id/SensorIlluminationValue"
                                 style="@style/TextSensorsStyle"/>
                         </LinearLayout>
@@ -283,7 +287,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="10 %"
                                 android:id="@+id/SensorBatteryValue"
                                 style="@style/TextSensorsStyle"/>
                         </LinearLayout>                           
