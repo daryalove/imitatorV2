@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Imitator\imitatorV2\Imitator.CommonData\Imitator.CommonData.csproj" />
+    <ProjectReference Include="..\Imitator.CommonData\Imitator.CommonData.csproj" />
     <ProjectReference Include="..\Imitator.WebServices\Imitator.WebServices.csproj" />
   </ItemGroup>
 

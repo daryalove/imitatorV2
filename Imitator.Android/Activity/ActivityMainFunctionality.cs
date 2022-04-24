@@ -10,8 +10,6 @@ using Imitator.Android.Activity.PersonalData;
 using Imitator.CommonData.DataModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Account;
-using System;
-using System.Threading.Tasks;
 using AlertDialog = Android.App.AlertDialog;
 using Toast = Android.Widget.Toast;
 using ToastLength = Android.Widget.ToastLength;

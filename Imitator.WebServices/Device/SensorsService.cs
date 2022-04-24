@@ -3,7 +3,6 @@ using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels;
 using Imitator.CommonData.ViewModels.Responses;
 using Newtonsoft.Json;
-using Plugin.Settings;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,7 +15,28 @@ namespace Imitator.WebServices.Device
 {
     public class SensorsService
     {
+        #region Variables
         private static HttpClient _httpClient;
+
+        //private static string registerBoxApi = "https://smartboxcity.ru:8003/imitator/create?id=";
+
+        private static string registerBoxIotApi = "http://iot.tmc-centert.ru/api/container/create?name=";
+
+        //private static string editBoxApi = "http://smartboxcity.ru:8003/imitator/sensors?";
+
+        private static string editBoxIotApi = "http://iot.tmc-centert.ru/api/container/editsensors?date=";
+
+        //private static string getInfoBoxApi = "http://smartboxcity.ru:8003/imitator/status?id=";
+
+        private static string getInfoBoxIotApi = "http://iot.tmc-centert.ru/api/container/getbox?id=";
+
+        //private static string makeAndCancelAlarmApi = "http://smartboxcity.ru:8003/imitator/";
+
+        private static string makeAlarmIotApi = "http://iot.tmc-centert.ru/api/container/raisealarm/?IMEI=";
+
+        private static string cancelAlarmIotApi = "http://iot.tmc-centert.ru/api/container/releasealarm/?IMEI=";
+
+        #endregion
 
         /// <summary>
         /// Инициализация экземпляра клиента
@@ -213,65 +233,12 @@ namespace Imitator.WebServices.Device
         /// <returns></returns>
         public static async Task<BaseModel> RegisterBox(string id)
         {
-            /*http://smartboxcity.ru:8003/imitator/create POST создает контейнер
-             * http://iot.tmc-centert.ru/api/container/SearchCommandPhoto?name=123
-http://smartboxcity.ru:8003/imitator/delete GET удаляет контейнер*/
-
-
             try
             {
-                #region WebRequest Example
-                //var formContent = new Dictionary<string, string>
-                //    {
-                //        { "Id", StaticBox.DeviceId }
-                //    };
-
-                //string newData = "";
-
-                //foreach (string key in formContent.Keys)
-                //{
-                //    newData += key + "="
-                //          + formContent[key] + "&";
-                //}
-
-                //var postData = newData.Remove(newData.Length - 1, 1);
-
-                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://smartboxcity.ru:8003/imitator/create");
-                //request.Method = "POST";
-
-
-                //byte[] data = Encoding.ASCII.GetBytes(postData);
-
-                //request.ContentType = "multipart/form-data";
-                //request.ContentLength = data.Length;
-
-                //Stream requestStream = request.GetRequestStream();
-                //requestStream.Write(data, 0, data.Length);
-                //requestStream.Close();
-                //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                //Stream responseStream = response.GetResponseStream();
-
-                //StreamReader myStreamReader = new StreamReader(responseStream, Encoding.Default);
-
-                //string s_result = myStreamReader.ReadToEnd();
-
-                //myStreamReader.Close();
-                //responseStream.Close();
-
-                //response.Close();
-                #endregion
-
-                CreateBoxModel model = new CreateBoxModel
-                {
-                    id = id
-                };
-
                 var myHttpClient = new HttpClient();
-                var uri = new Uri("https://smartboxcity.ru:8003/imitator/create?id=" + model.id);
+                var uri = new Uri(registerBoxIotApi + id);
 
-                // Поучаю ответ об авторизации [успех или нет]
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString() /*new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")*/);
+                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
 
                 string s_result;
                 using (HttpContent responseContent = response.Content)
@@ -292,7 +259,6 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     md.Result = DefaultEnums.Result.Error;
                     return md;
                 }
-                // AuthApiData<AuthResponseData> o_data = JsonConvert.DeserializeObject<AuthApiData<AuthResponseData>>(s_result);
             }
             catch (Exception ex)
             {
@@ -304,6 +270,100 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 };
                 return o_data;
             }
+
+            #region Obsolete
+            /*http://smartboxcity.ru:8003/imitator/create POST создает контейнер
+             * http://iot.tmc-centert.ru/api/container/SearchCommandPhoto?name=123
+http://smartboxcity.ru:8003/imitator/delete GET удаляет контейнер*/
+
+
+            //try
+            //{
+            //    #region WebRequest Example
+            //    //var formContent = new Dictionary<string, string>
+            //    //    {
+            //    //        { "Id", StaticBox.DeviceId }
+            //    //    };
+
+            //    //string newData = "";
+
+            //    //foreach (string key in formContent.Keys)
+            //    //{
+            //    //    newData += key + "="
+            //    //          + formContent[key] + "&";
+            //    //}
+
+            //    //var postData = newData.Remove(newData.Length - 1, 1);
+
+            //    //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://smartboxcity.ru:8003/imitator/create");
+            //    //request.Method = "POST";
+
+
+            //    //byte[] data = Encoding.ASCII.GetBytes(postData);
+
+            //    //request.ContentType = "multipart/form-data";
+            //    //request.ContentLength = data.Length;
+
+            //    //Stream requestStream = request.GetRequestStream();
+            //    //requestStream.Write(data, 0, data.Length);
+            //    //requestStream.Close();
+            //    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            //    //Stream responseStream = response.GetResponseStream();
+
+            //    //StreamReader myStreamReader = new StreamReader(responseStream, Encoding.Default);
+
+            //    //string s_result = myStreamReader.ReadToEnd();
+
+            //    //myStreamReader.Close();
+            //    //responseStream.Close();
+
+            //    //response.Close();
+            //    #endregion
+
+            //    CreateBoxModel model = new CreateBoxModel
+            //    {
+            //        id = id
+            //    };
+
+            //    var myHttpClient = new HttpClient();
+            //    var uri = new Uri(registerBoxApi + model.id);
+
+            //    // Поучаю ответ об авторизации [успех или нет]
+            //    HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString() /*new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")*/);
+
+            //    string s_result;
+            //    using (HttpContent responseContent = response.Content)
+            //    {
+            //        s_result = await responseContent.ReadAsStringAsync();
+            //    }
+
+            //    BaseModel md = new BaseModel();
+            //    if (response.StatusCode == HttpStatusCode.OK)
+            //    {
+            //        md.SuccessInfo = "Создание виртуального контейнера завершено успешно.";
+            //        md.Result = DefaultEnums.Result.OK;
+            //        return md;
+            //    }
+            //    else
+            //    {
+            //        md.Error = new Exception(s_result);
+            //        md.Result = DefaultEnums.Result.Error;
+            //        return md;
+            //    }
+            //    // AuthApiData<AuthResponseData> o_data = JsonConvert.DeserializeObject<AuthApiData<AuthResponseData>>(s_result);
+            //}
+            //catch (Exception ex)
+            //{
+            //    BaseModel o_data = new BaseModel()
+            //    {
+            //        Error = ex,
+            //        ErrorInfo = ex.Message,
+            //        Result = DefaultEnums.Result.Warning
+            //    };
+            //    return o_data;
+            //}
+            #endregion
         }
 
         /// <summary>
@@ -318,12 +378,12 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 var date = DateTime.Now;
 
 
-                //var uri = new Uri("http://iot.tmc-centert.ru/api/container/editsensors?date=" + date + "&id=" + CrossSettings.Current.GetValueOrDefault("id", "") + "&sensors[Вес груза]=" + StaticBox.Sensors["Вес груза"]
+                //var uri = new Uri(editBoxIotApi + date + "&id=" + CrossSettings.Current.GetValueOrDefault("id", "") + "&sensors[Вес груза]=" + StaticBox.Sensors["Вес груза"]
                 //+ "&sensors[Температура]=" + StaticBox.Sensors["Температура"] + "&sensors[Влажность]=" + StaticBox.Sensors["Влажность"] + "&sensors[Освещенность]=" + StaticBox.Sensors["Освещенность"]
                 //+ "&sensors[Уровень заряда аккумулятора]=" + StaticBox.Sensors["Уровень заряда аккумулятора"] + "&sensors[Уровень сигнала]=" + StaticBox.Sensors["Уровень сигнала"] + "&sensors[Состояние дверей]=" + StaticBox.Sensors["Состояние дверей"]
                 //+ "&sensors[Состояние контейнера]=" + StaticBox.Sensors["Состояние контейнера"] + "&sensors[Местоположение контейнера]=" + StaticBox.Sensors["Местоположение контейнера"]);
 
-                var uri2 = new Uri("http://smartboxcity.ru:8003/imitator/sensors?" 
+                var uri2 = new Uri(editBoxIotApi + date
                 + "id=" + ForAnotherServer.id 
                 + "&sensors[Вес груза]=" + ForAnotherServer.Sensors["Вес груза"]
                 + "&sensors[Температура]=" + ForAnotherServer.Sensors["Температура"] 
@@ -421,9 +481,9 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
             try
             {
                 var myHttpClient = new HttpClient();
-                var uri = new Uri("https://iot.tmc-centert.ru/api/container/getbox?id=" + IMEI);
-                var uri2 = new Uri("http://smartboxcity.ru:8003/imitator/status?id=" + IMEI);
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri2.ToString());
+                var uri = new Uri(getInfoBoxIotApi + IMEI);
+                //var uri2 = new Uri(getInfoBoxApi + IMEI);
+                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
                 //var myHttpClient = new HttpClient();
                 //var id1 = CrossSettings.Current.GetValueOrDefault("id", "");
                 //var uri = new Uri("http://iot.tmc-centert.ru/api/container/getbox?id=" + id1);
@@ -555,8 +615,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
             try
             {
                 var myHttpClient = new HttpClient();
-                var uri = new Uri("http://smartboxcity.ru:8003/imitator/" + StaticBox.IMEI + "/alarm/" +
-                    /*CrossSettings.Current.GetValueOrDefault("AlermId", "")*/option + "/release");
+                var uri = new Uri(cancelAlarmIotApi + StaticBox.IMEI + "&option=" + option);
 
                 HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
                 string s_result;
@@ -574,7 +633,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     {
                         Status = "0",
                         ResponseData = o_data,
-                        Message = "Success"
+                        Message = o_data.Message
                     };
                     return o1;
                     //if (o_data.Message == "Угроза имитатора изменена")
@@ -593,16 +652,9 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 }
                 else
                 {
-                    ErrorResponseObject error = new ErrorResponseObject();
-                    error = JsonConvert.DeserializeObject<ErrorResponseObject>(s_result);
-                    string message = "";
-
-                    foreach (var mes in error.Errors)
-                    {
-                        message += mes + "\r\n";
-                    }
-
-                    throw new Exception(message);
+                    AlarmResponse error = new AlarmResponse();
+                    error = JsonConvert.DeserializeObject<AlarmResponse>(s_result);
+                    throw new Exception(error.Message);
                 }
             }
             catch (Exception ex)
@@ -624,8 +676,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
             try
             {
                 var myHttpClient = new HttpClient();
-                var uri = new Uri("http://smartboxcity.ru:8003/imitator/" + StaticBox.IMEI + "/alarm/" +
-                    option/*CrossSettings.Current.GetValueOrDefault("AlermId", "")*/ + "/raise");
+                var uri = new Uri(makeAlarmIotApi + StaticBox.IMEI + "&option=" + option);
 
                 HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
                 string s_result;
@@ -644,7 +695,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     {
                         Status = "0",
                         ResponseData = o_data,
-                        Message = "Success"
+                        Message = o_data.Message
                     };
                     return o1;
                     //if (o_data.Message == "Угроза имитатора изменена")
@@ -662,16 +713,9 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 }
                 else
                 {
-                    ErrorResponseObject error = new ErrorResponseObject();
-                    error = JsonConvert.DeserializeObject<ErrorResponseObject>(s_result);
-                    string message = "";
-
-                    foreach (var mes in error.Errors)
-                    {
-                        message += mes + "\r\n";
-                    }
-
-                    throw new Exception(message);
+                    AlarmResponse error = new AlarmResponse();
+                    error = JsonConvert.DeserializeObject<AlarmResponse>(s_result);
+                    throw new Exception(error.Message);
                 }
             }
             catch (Exception ex)

@@ -21,10 +21,12 @@ namespace Imitator.Android.Activity.MainFunctionality
         private RadioButton LiquidLeakAlarm { get; set; }
         private Button BtnSetAlarm { get; set; }
         private Button BtnCancelAlarm { get; set; }
+       
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
         }
+        
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.PageSetCancelAlarm, container, false);

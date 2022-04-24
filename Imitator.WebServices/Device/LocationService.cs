@@ -15,6 +15,10 @@ namespace Imitator.WebServices.Device
     {
         private static HttpClient _httpClient;
 
+        private static string setLocationApi = "http://smartboxcity.ru:8003/imitator/geo";
+
+        private static string setLocationIotApi = "http://iot-tmc-cen.1gb.ru/api/container/setcontainerlocation?id=";
+        
         /// <summary>
         /// Инициализация экземпляра клиента
         /// </summary>
@@ -88,20 +92,21 @@ namespace Imitator.WebServices.Device
             }
         }
 
+        #region Obsolete
         /// <summary>
         /// Обновление координат на стороне сервера Шахт.
         /// </summary>
         /// <param name="gpsLocation"></param>
         /// <returns></returns>
-        public static async Task<AuthApiData<BaseResponseObject>> SetLocation(BoxLocation gpsLocation)
+        private static async Task<AuthApiData<BaseResponseObject>> SetLocation(BoxLocation gpsLocation)
         {
             try
             {
                 int signal = 0;
 
                 var myHttpClient = new HttpClient();
-                // var uri = new Uri("http://iot-tmc-cen.1gb.ru/api/container/setcontainerlocation?id=" + gpsLocation.id + "&lat1=" + gpsLocation.lat1 + "&lon1=" + gpsLocation.lon1 + "&date=" + gpsLocation.date);
-                var uri2 = new Uri("http://smartboxcity.ru:8003/imitator/geo");
+                // var uri = new Uri(setLocationIotApi + gpsLocation.id + "&lat1=" + gpsLocation.lat1 + "&lon1=" + gpsLocation.lon1 + "&date=" + gpsLocation.date);
+                var uri2 = new Uri(setLocationApi);
 
 
                 //json структура.
@@ -160,6 +165,8 @@ namespace Imitator.WebServices.Device
                 };
                 return o_d;
             }
+            #endregion
+        
         }
     }
 }
