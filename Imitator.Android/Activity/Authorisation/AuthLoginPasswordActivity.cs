@@ -7,6 +7,7 @@ using System;
 
 namespace Imitator.Android.Activity.Authorisation
 {
+    [Obsolete]
     public class AuthLoginPasswordActivity : Fragment
     {
         private EditText UserLogin;

@@ -20,21 +20,21 @@ namespace Imitator.WebServices.Device
 
         //private static string registerBoxApi = "https://smartboxcity.ru:8003/imitator/create?id=";
 
-        private static string registerBoxIotApi = "http://iot.tmc-centert.ru/api/container/create?name=";
+        private static string registerBoxIotApi = "container/create?name=";
 
         //private static string editBoxApi = "http://smartboxcity.ru:8003/imitator/sensors?";
 
-        private static string editBoxIotApi = "http://iot.tmc-centert.ru/api/container/editsensors?date=";
+        private static string editBoxIotApi = "container/editsensors?date=";
 
         //private static string getInfoBoxApi = "http://smartboxcity.ru:8003/imitator/status?id=";
 
-        private static string getInfoBoxIotApi = "http://iot.tmc-centert.ru/api/container/getbox?id=";
+        private static string getInfoBoxIotApi = "container/getbox?id=";
 
         //private static string makeAndCancelAlarmApi = "http://smartboxcity.ru:8003/imitator/";
 
-        private static string makeAlarmIotApi = "http://iot.tmc-centert.ru/api/container/raisealarm/?IMEI=";
+        private static string makeAlarmIotApi = "container/raisealarm/?IMEI=";
 
-        private static string cancelAlarmIotApi = "http://iot.tmc-centert.ru/api/container/releasealarm/?IMEI=";
+        private static string cancelAlarmIotApi = "container/releasealarm/?IMEI=";
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace Imitator.WebServices.Device
                     { "Version", model.Version }
                 });
 
-                HttpResponseMessage response = await _httpClient.PostAsync($"registerdevice?Idiom={model.Idiom}&" +
+                HttpResponseMessage response = await _httpClient.PostAsync($"imitator/registerdevice?Idiom={model.Idiom}&" +
                     $"IMEI={model.IMEI}&Manufacturer={model.Manufacturer}&ModelName={model.ModelName}&Name={model.Name}" +
                     $"&Platform={model.Platform}&Version={model.Version}", formContent);
                
@@ -138,7 +138,7 @@ namespace Imitator.WebServices.Device
                         { "IMEI", IMEI },
                     });
 
-                HttpResponseMessage response = await _httpClient.PostAsync($"UpdatePhotoRequest?IMEI={IMEI}", formContent);
+                HttpResponseMessage response = await _httpClient.PostAsync($"imitator/UpdatePhotoRequest?IMEI={IMEI}", formContent);
                 
                 string s_result;
                 using (HttpContent responseContent = response.Content)
@@ -189,7 +189,7 @@ namespace Imitator.WebServices.Device
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"SearchPhotoRequest?id={id}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"imitator/SearchPhotoRequest?id={id}");
                 string s_result;
                 using (HttpContent responseContent = response.Content)
                 {
@@ -235,10 +235,12 @@ namespace Imitator.WebServices.Device
         {
             try
             {
-                var myHttpClient = new HttpClient();
-                var uri = new Uri(registerBoxIotApi + id);
+                var formContent = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    { "name", id }
+                });
 
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
+                HttpResponseMessage response = await _httpClient.PostAsync(registerBoxIotApi + id, formContent);
 
                 string s_result;
                 using (HttpContent responseContent = response.Content)
@@ -374,16 +376,16 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
         {
             try
             {
-                var myHttpClient = new HttpClient();
                 var date = DateTime.Now;
 
-
+                #region Obsolete
                 //var uri = new Uri(editBoxIotApi + date + "&id=" + CrossSettings.Current.GetValueOrDefault("id", "") + "&sensors[Вес груза]=" + StaticBox.Sensors["Вес груза"]
                 //+ "&sensors[Температура]=" + StaticBox.Sensors["Температура"] + "&sensors[Влажность]=" + StaticBox.Sensors["Влажность"] + "&sensors[Освещенность]=" + StaticBox.Sensors["Освещенность"]
                 //+ "&sensors[Уровень заряда аккумулятора]=" + StaticBox.Sensors["Уровень заряда аккумулятора"] + "&sensors[Уровень сигнала]=" + StaticBox.Sensors["Уровень сигнала"] + "&sensors[Состояние дверей]=" + StaticBox.Sensors["Состояние дверей"]
                 //+ "&sensors[Состояние контейнера]=" + StaticBox.Sensors["Состояние контейнера"] + "&sensors[Местоположение контейнера]=" + StaticBox.Sensors["Местоположение контейнера"]);
+                #endregion
 
-                var uri2 = new Uri(editBoxIotApi + date
+                string uri2 = editBoxIotApi + date
                 + "id=" + ForAnotherServer.id 
                 + "&sensors[Вес груза]=" + ForAnotherServer.Sensors["Вес груза"]
                 + "&sensors[Температура]=" + ForAnotherServer.Sensors["Температура"] 
@@ -393,23 +395,24 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 + "&sensors[Уровень сигнала]=" + ForAnotherServer.Sensors["Уровень сигнала"] 
                 + "&sensors[Состояние дверей]=" + ForAnotherServer.Sensors["Состояние дверей"]
                 + "&sensors[Состояние контейнера]=" + ForAnotherServer.Sensors["Состояние контейнера"] 
-                + "&sensors[Местоположение контейнера]=" + ForAnotherServer.Sensors["Местоположение контейнера"]);
+                + "&sensors[Местоположение контейнера]=" + ForAnotherServer.Sensors["Местоположение контейнера"];
 
 
-            //    var formContent = new FormUrlEncodedContent(new Dictionary<string, string>
-            //{
-            //    { "id", StaticBox.IMEI },
-            //    { "date", date.ToString()},
-            //    { "sensors[Вес груза]", StaticBox.Sensors["Вес груза"]},
-            //    { "sensors[Температура]", StaticBox.Sensors["Температура"]},
-            //    { "sensors[Влажность]", StaticBox.Sensors["Влажность"]},
-            //    { "sensors[Освещенность]", StaticBox.Sensors["Освещенность"]},
-            //    { "sensors[Уровень заряда аккумулятора]", StaticBox.Sensors["Уровень заряда аккумулятора"]},
-            //    { "sensors[Уровень сигнала]", StaticBox.Sensors["Уровень сигнала"]},
-            //    { "sensors[Состояние дверей]", StaticBox.Sensors["Состояние дверей"]},
-            //    { "sensors[Состояние контейнера]", StaticBox.Sensors["Состояние контейнера"]},
-            //    { "sensors[Местоположение контейнера]", StaticBox.Sensors["Местоположение контейнера"]}
-            //});
+                #region Obsolete
+                //    var formContent = new FormUrlEncodedContent(new Dictionary<string, string>
+                //{
+                //    { "id", StaticBox.IMEI },
+                //    { "date", date.ToString()},
+                //    { "sensors[Вес груза]", StaticBox.Sensors["Вес груза"]},
+                //    { "sensors[Температура]", StaticBox.Sensors["Температура"]},
+                //    { "sensors[Влажность]", StaticBox.Sensors["Влажность"]},
+                //    { "sensors[Освещенность]", StaticBox.Sensors["Освещенность"]},
+                //    { "sensors[Уровень заряда аккумулятора]", StaticBox.Sensors["Уровень заряда аккумулятора"]},
+                //    { "sensors[Уровень сигнала]", StaticBox.Sensors["Уровень сигнала"]},
+                //    { "sensors[Состояние дверей]", StaticBox.Sensors["Состояние дверей"]},
+                //    { "sensors[Состояние контейнера]", StaticBox.Sensors["Состояние контейнера"]},
+                //    { "sensors[Местоположение контейнера]", StaticBox.Sensors["Местоположение контейнера"]}
+                //});
 
                 //EditBoxViewModel box = new EditBoxViewModel
                 //{
@@ -431,15 +434,11 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
 
                 //var data = new StringContent(JsonConvert.SerializeObject(box));
                 //HttpResponseMessage response = await myHttpClient.PostAsync(uri.ToString(), formContent);
-                HttpResponseMessage responseFromAnotherServer = await myHttpClient.PostAsync(uri2.ToString(), new StringContent(JsonConvert.SerializeObject(ForAnotherServer), Encoding.UTF8, "application/json"));
+                #endregion Obsolete
+
+                HttpResponseMessage responseFromAnotherServer = await _httpClient.PostAsync(uri2, new StringContent(JsonConvert.SerializeObject(ForAnotherServer), Encoding.UTF8, "application/json"));
 
                 AuthApiData<BaseResponseObject> o_data = new AuthApiData<BaseResponseObject>();
-
-                //string s_result;
-                //using (HttpContent responseContent = response.Content)
-                //{
-                //    s_result = await responseContent.ReadAsStringAsync();
-                //}
 
                 string s_result_from_server;
                 using (HttpContent responseContent = responseFromAnotherServer.Content)
@@ -480,14 +479,14 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
         {
             try
             {
-                var myHttpClient = new HttpClient();
-                var uri = new Uri(getInfoBoxIotApi + IMEI);
-                //var uri2 = new Uri(getInfoBoxApi + IMEI);
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
+                HttpResponseMessage response = await _httpClient.GetAsync(getInfoBoxIotApi + IMEI);
+
+                #region Obsolete
                 //var myHttpClient = new HttpClient();
                 //var id1 = CrossSettings.Current.GetValueOrDefault("id", "");
                 //var uri = new Uri("http://iot.tmc-centert.ru/api/container/getbox?id=" + id1);
                 // HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
+                #endregion
 
                 string s_result;
                 using (HttpContent responseContent = response.Content)
@@ -521,6 +520,8 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                         Result = DefaultEnums.Result.OK,
                         SuccessInfo = "Успешно."
                     };
+
+                    #region Obsolete
                     //StaticBox.CreatedAtSensors = (DateTime)o_data.ResponseData.Objects[0].CreatedAt;
                     ////Заполняй остальные параметры как в этом примере
                     //int a = 0, b = 0;
@@ -569,12 +570,16 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     //    dialog.Show();
                     //}
                     //btn_cause_alarm.Enabled = true;
+
+                    #endregion
                 }
                 else
                 {
                     ErrorResponseObject error = new ErrorResponseObject();
                     error = JsonConvert.DeserializeObject<ErrorResponseObject>(s_result);
                     throw new Exception(error.Errors[0]);
+
+                    #region Obsolete
                     //Toast.MakeText(this, error.Errors[0], ToastLength.Long).Show();
                     //btn_cause_alarm.Enabled = false;
 
@@ -592,6 +597,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     //    //Intent authActivity = new Intent(this, typeof(Auth.SensorsDataActivity));
                     //    //StartActivity(authActivity);
                     //}
+                    #endregion
                 }
 
             }
@@ -614,10 +620,9 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
         {
             try
             {
-                var myHttpClient = new HttpClient();
-                var uri = new Uri(cancelAlarmIotApi + StaticBox.IMEI + "&option=" + option);
+                string uri = cancelAlarmIotApi + StaticBox.IMEI + "&option=" + option;
 
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
+                HttpResponseMessage response = await _httpClient.GetAsync(uri);
                 string s_result;
                 using (HttpContent responseContent = response.Content)
                 {
@@ -636,6 +641,8 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                         Message = o_data.Message
                     };
                     return o1;
+
+                    #region Dialog
                     //if (o_data.Message == "Угроза имитатора изменена")
                     //{
                     //    CrossSettings.Current.AddOrUpdateValue("AlermId", "0");
@@ -649,6 +656,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     //});
                     //Dialog dialog1 = alert.Create();
                     //dialog1.Show();
+                    #endregion
                 }
                 else
                 {
@@ -675,10 +683,9 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
         {
             try
             {
-                var myHttpClient = new HttpClient();
-                var uri = new Uri(makeAlarmIotApi + StaticBox.IMEI + "&option=" + option);
+                string uri = makeAlarmIotApi + StaticBox.IMEI + "&option=" + option;
 
-                HttpResponseMessage response = await myHttpClient.GetAsync(uri.ToString());
+                HttpResponseMessage response = await _httpClient.GetAsync(uri);
                 string s_result;
 
                 using (HttpContent responseContent = response.Content)
@@ -698,6 +705,8 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                         Message = o_data.Message
                     };
                     return o1;
+
+                    #region Dialog
                     //if (o_data.Message == "Угроза имитатора изменена")
                     //{
                     //    btn_cause_alarm.Text = "Отменить тревогу";
@@ -710,6 +719,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                     //});
                     //Dialog dialog1 = alert.Create();
                     //dialog1.Show();
+                    #endregion
                 }
                 else
                 {

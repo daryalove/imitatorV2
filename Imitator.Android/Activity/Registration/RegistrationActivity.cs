@@ -73,7 +73,6 @@ namespace Imitator.Android.Activity.Registration
 
         private async void RegistrationBoxMethod()
         {
-
             var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
 
             if (o_data.Result.ToString() == "OK")

@@ -45,7 +45,7 @@ namespace Imitator.WebServices.Device
                         { "CurrentDate", model.CurrentDate.ToString()}
                     });
 
-                HttpResponseMessage response = await _httpClient.PostAsync($"SetGPS?DeviceId={model.DeviceId}&Longitude={model.Longitude}&" +
+                HttpResponseMessage response = await _httpClient.PostAsync($"imitator/SetGPS?DeviceId={model.DeviceId}&Longitude={model.Longitude}&" +
                     $"Latitude={model.Latitude}&CurrentDate={model.CurrentDate}", formContent);
                 
                 string s_result;

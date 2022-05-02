@@ -9,7 +9,7 @@ namespace Imitator.WebServices
 {
     public class ClientHelper
     {
-        public const string URL = "https://iot.tmc-centert.ru/api/imitator/";
+        public const string URL = "https://iot.tmc-centert.ru/api/";
 
         public static HttpClient GetClient()
         {
