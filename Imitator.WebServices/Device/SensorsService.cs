@@ -2,6 +2,7 @@
 using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels;
 using Imitator.CommonData.ViewModels.Responses;
+using Imitator.CommonData.ViewModels.Responses.SmartBoxResponse;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,11 @@ namespace Imitator.WebServices.Device
 
         //private static string editBoxApi = "http://smartboxcity.ru:8003/imitator/sensors?";
 
-        private static string editBoxIotApi = "container/editsensors?date=";
+        private static string editBoxIotApi = "container/editsensors?id=";
 
         //private static string getInfoBoxApi = "http://smartboxcity.ru:8003/imitator/status?id=";
 
-        private static string getInfoBoxIotApi = "container/getbox?id=";
+        private static string getInfoBoxIotApi = "container/getbox?IMEI=";
 
         //private static string makeAndCancelAlarmApi = "http://smartboxcity.ru:8003/imitator/";
 
@@ -378,6 +379,8 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
             {
                 var date = DateTime.Now;
 
+                ForAnotherServer.Date = date;
+
                 #region Obsolete
                 //var uri = new Uri(editBoxIotApi + date + "&id=" + CrossSettings.Current.GetValueOrDefault("id", "") + "&sensors[Вес груза]=" + StaticBox.Sensors["Вес груза"]
                 //+ "&sensors[Температура]=" + StaticBox.Sensors["Температура"] + "&sensors[Влажность]=" + StaticBox.Sensors["Влажность"] + "&sensors[Освещенность]=" + StaticBox.Sensors["Освещенность"]
@@ -385,8 +388,8 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 //+ "&sensors[Состояние контейнера]=" + StaticBox.Sensors["Состояние контейнера"] + "&sensors[Местоположение контейнера]=" + StaticBox.Sensors["Местоположение контейнера"]);
                 #endregion
 
-                string uri2 = editBoxIotApi + date
-                + "id=" + ForAnotherServer.id 
+                string uri2 = editBoxIotApi + ForAnotherServer.id
+                + "&date=" + date
                 + "&sensors[Вес груза]=" + ForAnotherServer.Sensors["Вес груза"]
                 + "&sensors[Температура]=" + ForAnotherServer.Sensors["Температура"] 
                 + "&sensors[Влажность]=" + ForAnotherServer.Sensors["Влажность"] 
@@ -496,24 +499,33 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Status o_data = new Status();
+                    var o_data = new AuthApiData<ListResponse<CommonData.ViewModels.Responses.SmartBoxResponse.BoxResponse>>();
+                    o_data = JsonConvert.DeserializeObject<AuthApiData<ListResponse<CommonData.ViewModels.Responses.SmartBoxResponse.BoxResponse>>>(s_result);
 
-                    o_data = JsonConvert.DeserializeObject<Status>(s_result);
+                    if (o_data.ResponseData == null)
+                        throw new Exception("Ошибка получения данных");
 
+                    foreach (var data in o_data.ResponseData.Objects)
+                    {
+                        StaticBox.Sensors[data.SensorName] = data.Value;
+                    }
+
+                    #region Initialize Static Box
                     //В статик бокс закомментируй 9 свойств
-                    StaticBox.Sensors["Температура"] = o_data.status.Sensors["Температура"].Replace(".", ",");
-                    StaticBox.Sensors["Влажность"] = o_data.status.Sensors["Влажность"].Replace(".", ",");
-                    StaticBox.Sensors["Освещенность"] = o_data.status.Sensors["Освещенность"].Replace(".", ",");
-                    StaticBox.Sensors["Уровень заряда аккумулятора"] = o_data.status.Sensors["Уровень заряда аккумулятора"].Replace(".", ",");
-                    StaticBox.Sensors["Уровень сигнала"] = o_data.status.Sensors["Уровень сигнала"].Replace(".", ",");
-                    StaticBox.Sensors["Состояние дверей"] = o_data.status.Sensors["Состояние дверей"];
-                    StaticBox.Sensors["Состояние контейнера"] = o_data.status.Sensors["Состояние контейнера"];
-                    StaticBox.Sensors["Местоположение контейнера"] = o_data.status.Sensors["Местоположение контейнера"];
+                    //StaticBox.Sensors["Температура"] = o_data.status.Sensors["Температура"].Replace(".", ",");
+                    //StaticBox.Sensors["Влажность"] = o_data.status.Sensors["Влажность"].Replace(".", ",");
+                    //StaticBox.Sensors["Освещенность"] = o_data.status.Sensors["Освещенность"].Replace(".", ",");
+                    //StaticBox.Sensors["Уровень заряда аккумулятора"] = o_data.status.Sensors["Уровень заряда аккумулятора"].Replace(".", ",");
+                    //StaticBox.Sensors["Уровень сигнала"] = o_data.status.Sensors["Уровень сигнала"].Replace(".", ",");
+                    //StaticBox.Sensors["Состояние дверей"] = o_data.status.Sensors["Состояние дверей"];
+                    //StaticBox.Sensors["Состояние контейнера"] = o_data.status.Sensors["Состояние контейнера"];
+                    //StaticBox.Sensors["Местоположение контейнера"] = o_data.status.Sensors["Местоположение контейнера"];
+                    #endregion
 
                     if (StaticBox.Sensors["Состояние контейнера"] == "0")
                         StaticBox.Sensors["Вес груза"] = "0";
-                    else
-                        StaticBox.Sensors["Вес груза"] = o_data.status.Sensors["Вес груза"];
+                    //else
+                    //    StaticBox.Sensors["Вес груза"] = o_data.status.Sensors["Вес груза"];
 
                     return new BaseModel()
                     {

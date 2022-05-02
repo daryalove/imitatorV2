@@ -8,7 +8,7 @@ namespace Imitator.CommonData.ViewModels.Responses
     {
         public string id { get; set; }
 
-
+        public DateTime Date { get; set; }
         //public string Weight { get; set; }
 
 
