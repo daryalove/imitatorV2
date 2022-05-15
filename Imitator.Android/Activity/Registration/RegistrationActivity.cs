@@ -73,17 +73,21 @@ namespace Imitator.Android.Activity.Registration
 
         private async void RegistrationBoxMethod()
         {
-            var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
-
-            if (o_data.Result.ToString() == "OK")
+            using (var httpClient = ClientHelper.GetClient(StaticUser.Token))
             {
-                Toast.MakeText(this, "Регистрация прошла успешно !", ToastLength.Long).Show();
+                SensorsService.InitializeClient(httpClient);
+                var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
 
-                Intent intent = new Intent(this, typeof(Activity.ActivityMainFunctionality));
-                StartActivity(intent);
+                if (o_data.Result.ToString() == "OK")
+                {
+                    Toast.MakeText(this, "Регистрация прошла успешно !", ToastLength.Long).Show();
+
+                    Intent intent = new Intent(this, typeof(Activity.ActivityMainFunctionality));
+                    StartActivity(intent);
+                }
+                else
+                    Toast.MakeText(this, "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
             }
-            else
-                Toast.MakeText(this, "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
         }
 
         private async void RegistrationDeviceMethod()

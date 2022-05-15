@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.Graphics;
-using Android.Hardware;
-using Android.Media;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Com.Akaita.Android.Circularseekbar;
 using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels.Responses;
+using Imitator.WebServices;
 using Imitator.WebServices.Device;
-using Xamarin.Essentials;
+using System;
+using System.Collections.Generic;
 using static Android.Views.View;
 using static Com.Akaita.Android.Circularseekbar.CircularSeekBar;
 
@@ -207,39 +198,44 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             try
             {
-                EditBoxViewModel ForAnotherServer = new EditBoxViewModel
+                using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
-                    id = "866588031322022",
+                    SensorsService.InitializeClient(client);
 
-                    Sensors = new Dictionary<string, string>
+                    EditBoxViewModel ForAnotherServer = new EditBoxViewModel
                     {
-                        ["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text.Replace(",", "."),
-                        ["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text.Replace(",", "."),
-                        ["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text.Replace(",", "."),
-                        ["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text.Replace(",", "."),
-                        ["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text.Replace(",", "."),
-                        ["Уровень сигнала"] = "-8",
-                        ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
-                        ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
-                        ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
-                    },
-                };
+                        id = StaticBox.IMEI,
 
-                var o_data = await SensorsService.EditBox(ForAnotherServer);
+                        Sensors = new Dictionary<string, string>
+                        {
+                            ["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text.Replace(",", "."),
+                            ["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text.Replace(",", "."),
+                            ["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text.Replace(",", "."),
+                            ["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text.Replace(",", "."),
+                            ["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text.Replace(",", "."),
+                            ["Уровень сигнала"] = "-8",
+                            ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
+                            ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
+                            ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
+                        },
+                    };
 
-                if (o_data.Status == "0")
-                {
-                    StaticBox.Sensors["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text;
-                    StaticBox.Sensors["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text;
-                    StaticBox.Sensors["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text;
-                    StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text;
-                    StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text;
-                    StaticBox.Sensors["Уровень сигнала"] = "-8";
-                    Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
-                }
-                else
-                    Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
-                        "Ошибка: " + o_data.Message, ToastLength.Long).Show();
+                    var o_data = await SensorsService.EditBox(ForAnotherServer);
+
+                    if (o_data.Status == "0")
+                    {
+                        StaticBox.Sensors["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text;
+                        StaticBox.Sensors["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text;
+                        StaticBox.Sensors["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text;
+                        StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text;
+                        StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text;
+                        StaticBox.Sensors["Уровень сигнала"] = "-8";
+                        Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
+                    }
+                    else
+                        Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
+                            "Ошибка: " + o_data.Message, ToastLength.Long).Show();
+                }    
             }
             catch (System.Exception ex)
             {
@@ -251,33 +247,37 @@ namespace Imitator.Android.Activity.MainFunctionality
         {        
             try
             {
-                var o_data = await SensorsService.GetInfoBox("866588031322022");
-
-                if (o_data.Result.ToString() == "OK")
+                using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
-                    if (StaticBox.Sensors["Состояние контейнера"] == "0")
+                    var o_data = await SensorsService.GetInfoBox(StaticBox.IMEI);
+
+                    if (o_data.Result.ToString() == "OK")
                     {
-                        Color WeightSensorTextColor = new Color(ContextCompat.GetColor(Activity, Resource.Color.NotActivPageColor));
-                        sensors.Find(w => w.SensorName.Text == "Вес").SensorName.SetTextColor(WeightSensorTextColor);
-                        sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.SetTextColor(WeightSensorTextColor);
+                        if (StaticBox.Sensors["Состояние контейнера"] == "0")
+                        {
+                            Color WeightSensorTextColor = new Color(ContextCompat.GetColor(Activity, Resource.Color.NotActivPageColor));
+                            sensors.Find(w => w.SensorName.Text == "Вес").SensorName.SetTextColor(WeightSensorTextColor);
+                            sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.SetTextColor(WeightSensorTextColor);
 
-                        AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
-                        alert.SetTitle("Оповещение");
-                        alert.SetMessage("Состояние контейнера:  сложен. Невозможно изменить значение датчика веса.");
-                        alert.SetPositiveButton("Ок", (senderAlert, args) => { });
-                        Dialog dialog = alert.Create();
-                        dialog.Show();
+                            AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
+                            alert.SetTitle("Оповещение");
+                            alert.SetMessage("Состояние контейнера:  сложен. Невозможно изменить значение датчика веса.");
+                            alert.SetPositiveButton("Ок", (senderAlert, args) => { });
+                            Dialog dialog = alert.Create();
+                            dialog.Show();
+                        }
+
+                        SetSensorsValue(StaticBox.Sensors["Вес груза"], StaticBox.Sensors["Температура"],
+                            StaticBox.Sensors["Влажность"], StaticBox.Sensors["Освещенность"], StaticBox.Sensors["Уровень заряда аккумулятора"]);
                     }
-
-                    SetSensorsValue(StaticBox.Sensors["Вес груза"], StaticBox.Sensors["Температура"],
-                        StaticBox.Sensors["Влажность"], StaticBox.Sensors["Освещенность"], StaticBox.Sensors["Уровень заряда аккумулятора"]);
+                    else
+                    {
+                        SetSensorsValue("???", "???", "???", "???", "???");
+                        Toast.MakeText(Activity, "Не удалось получить значения датчиков. " +
+                            "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                    }
                 }
-                else
-                {
-                    SetSensorsValue("???", "???", "???", "???", "???");
-                    Toast.MakeText(Activity, "Не удалось получить значения датчиков. " +
-                        "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
-                }
+                
             }
             catch (System.Exception ex)
             {

@@ -13,6 +13,7 @@ using Android.Widget;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
+    [Obsolete]
     public class ActivityMap : Fragment
     {
         public override void OnCreate(Bundle savedInstanceState)

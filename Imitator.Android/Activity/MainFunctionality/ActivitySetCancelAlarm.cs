@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Imitator.CommonData.DataModels;
+using Imitator.WebServices;
 using Imitator.WebServices.Device;
+using System;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
@@ -80,29 +76,37 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         private async void SetAlarmMethod(string AlarmId)
         {
-            var o_data = await SensorsService.MakeRequestAlarm(AlarmId);
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
+            {
+                SensorsService.InitializeClient(client);
+                var o_data = await SensorsService.MakeRequestAlarm(AlarmId);
 
-            if (o_data.Status.ToString() == "0")
-            {
-                Toast.MakeText(Activity, "Тревога установлена успешно.", ToastLength.Long).Show();
-            }
-            else
-            {
-                Toast.MakeText(Activity, "Не получилось установить тревогу. Ошибка: " + o_data.Message, ToastLength.Long).Show();
-            }
+                if (o_data.Status.ToString() == "0")
+                {
+                    Toast.MakeText(Activity, "Тревога установлена успешно.", ToastLength.Long).Show();
+                }
+                else
+                {
+                    Toast.MakeText(Activity, "Не получилось установить тревогу. Ошибка: " + o_data.Message, ToastLength.Long).Show();
+                }
+            }    
         }
 
         private async void  CancelAlarmMethod(string AlarmId)
         {
-            var o_data = await SensorsService.CancelAlarm(AlarmId);
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
+            {
+                SensorsService.InitializeClient(client);
+                var o_data = await SensorsService.CancelAlarm(AlarmId);
 
-            if (o_data.Status.ToString() == "0")
-            {
-                Toast.MakeText(Activity, "Тревога была успешно отменена.", ToastLength.Long).Show();
-            }
-            else
-            {
-                Toast.MakeText(Activity, "Не получилось отменить тревогу. Ошибка: " + o_data.Message, ToastLength.Long).Show();
+                if (o_data.Status.ToString() == "0")
+                {
+                    Toast.MakeText(Activity, "Тревога была успешно отменена.", ToastLength.Long).Show();
+                }
+                else
+                {
+                    Toast.MakeText(Activity, "Не получилось отменить тревогу. Ошибка: " + o_data.Message, ToastLength.Long).Show();
+                }
             }
         }
 
