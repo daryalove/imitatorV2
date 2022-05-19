@@ -11,6 +11,7 @@ using Imitator.CommonData.DataModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Account;
 using AlertDialog = Android.App.AlertDialog;
+using Settings = Android.Provider.Settings;
 using Toast = Android.Widget.Toast;
 using ToastLength = Android.Widget.ToastLength;
 
@@ -31,6 +32,8 @@ namespace Imitator.Android.Activity
                 Toolbar toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
                 SetSupportActionBar(toolbar);
                 SupportActionBar.Title = "Имитатор";
+
+                StaticBox.IMEI = Settings.Secure.GetString(ContentResolver, Settings.Secure.AndroidId);
 
                 BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.NavigationFormMainFunctionality);
 

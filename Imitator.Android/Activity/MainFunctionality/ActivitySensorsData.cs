@@ -12,7 +12,9 @@ using Imitator.WebServices.Device;
 using System;
 using System.Collections.Generic;
 using static Android.Views.View;
+using Settings = Android.Provider.Settings;
 using static Com.Akaita.Android.Circularseekbar.CircularSeekBar;
+using Android.Content;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
@@ -132,8 +134,6 @@ namespace Imitator.Android.Activity.MainFunctionality
                 seekBar.SetOnTouchListener(this);
                 seekBar.ProgressChanged += SeekBar_ProgressChanged;
 
-
-
                 // Если данные с сервера уже были получены, не отправлять запрос на сервер, а воспользоваться имеющимися в статическом классе данными
                 if (OnNullOrEmptySensorsValueVerification())
                     GetSensorsData();
@@ -249,6 +249,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             {
                 using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
+                    SensorsService.InitializeClient(client);
                     var o_data = await SensorsService.GetInfoBox(StaticBox.IMEI);
 
                     if (o_data.Result.ToString() == "OK")
