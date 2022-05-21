@@ -37,6 +37,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         //private View BatteryView;
 
         private CircularSeekBar seekBar;
+        private ProgressBar preloader;
 
         private Button BtnIncreaseSensorValue;
         private Button BtnReduceSensorValue;
@@ -67,12 +68,13 @@ namespace Imitator.Android.Activity.MainFunctionality
                 SelectedSensorValue = view.FindViewById<TextView>(Resource.Id.SelectedSensorValue);
 
                 seekBar = view.FindViewById<CircularSeekBar>(Resource.Id.SeekBarSelectedCharacteristic);
+                preloader = view.FindViewById<ProgressBar>(Resource.Id.loader);
 
                 BtnIncreaseSensorValue = view.FindViewById<Button>(Resource.Id.BtnIncreaseSensorValue);
                 BtnReduceSensorValue = view.FindViewById<Button>(Resource.Id.BtnReduceSensorValue);
                 BtnSaveChangedSensorValues = view.FindViewById<Button>(Resource.Id.BtnSaveChangedSensorValues);
 
-                Sensor weight = new Sensor(0, 5000, " кг", Resource.Drawable.SensorWeightImage);
+                Sensor weight = new Sensor(0, 5000, "", Resource.Drawable.SensorWeightImage);
                 weight.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorWeightLinearLayout);
                 weight.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorWeightValue);                
                 weight.SensorName = view.FindViewById<TextView>(Resource.Id.SensorWeightText);
@@ -80,15 +82,15 @@ namespace Imitator.Android.Activity.MainFunctionality
                 weight.SensorName.Click += SelectedSensor_Click;
                 weight.CurrentValue.Text = StaticBox.Sensors["Вес груза"];
 
-                Sensor temperatur = new Sensor(-45, 80, " °C", Resource.Drawable.SensorTemperatureImage);
+                Sensor temperatur = new Sensor(-45, 80, "", Resource.Drawable.SensorTemperatureImage);
                 temperatur.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorTemperatureLinearLayout);
                 temperatur.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorTemperatureValue);
                 temperatur.SensorName = view.FindViewById<TextView>(Resource.Id.SensorTemperatureText);
-                temperatur.SensorName.Text = "Температура";
+                temperatur.SensorName.Text = "Температура,";
                 temperatur.SensorName.Click += SelectedSensor_Click;
                 temperatur.CurrentValue.Text = StaticBox.Sensors["Температура"];
 
-                Sensor humidity = new Sensor(0, 100, " %", Resource.Drawable.SensorHumidityImage);
+                Sensor humidity = new Sensor(0, 100, "", Resource.Drawable.SensorHumidityImage);
                 humidity.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorHumidityLinearLayout);
                 humidity.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorHumidityValue);
                 humidity.SensorName = view.FindViewById<TextView>(Resource.Id.SensorHumidityText);
@@ -96,7 +98,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 humidity.SensorName.Click += SelectedSensor_Click;
                 humidity.CurrentValue.Text = StaticBox.Sensors["Влажность"];
 
-                Sensor illumination = new Sensor(0, 1000, " лм", Resource.Drawable.SensorIlluminationImage);
+                Sensor illumination = new Sensor(0, 1000, "", Resource.Drawable.SensorIlluminationImage);
                 illumination.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorIlluminationLinearLayout);
                 illumination.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorIlluminationValue);
                 illumination.SensorName = view.FindViewById<TextView>(Resource.Id.SensorIlluminationText);
@@ -104,7 +106,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 illumination.SensorName.Click += SelectedSensor_Click;
                 illumination.CurrentValue.Text = StaticBox.Sensors["Освещенность"];
 
-                Sensor battery = new Sensor(0, 16, " %", Resource.Drawable.SensorBatteryImage);
+                Sensor battery = new Sensor(0, 16, "", Resource.Drawable.SensorBatteryImage);
                 battery.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorBatteryLinearLayout);
                 battery.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorBatteryValue);
                 battery.SensorName = view.FindViewById<TextView>(Resource.Id.SensorBatteryText);
@@ -198,6 +200,8 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             try
             {
+                preloader.Visibility = ViewStates.Visible;
+
                 using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
                     SensorsService.InitializeClient(client);
@@ -235,11 +239,14 @@ namespace Imitator.Android.Activity.MainFunctionality
                     else
                         Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
                             "Ошибка: " + o_data.Message, ToastLength.Long).Show();
+
+                    preloader.Visibility = ViewStates.Invisible;
                 }    
             }
             catch (System.Exception ex)
             {
                 Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
+                preloader.Visibility = ViewStates.Invisible;
             }           
         }
 
@@ -270,6 +277,7 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                         SetSensorsValue(StaticBox.Sensors["Вес груза"], StaticBox.Sensors["Температура"],
                             StaticBox.Sensors["Влажность"], StaticBox.Sensors["Освещенность"], StaticBox.Sensors["Уровень заряда аккумулятора"]);
+                        Toast.MakeText(Activity, o_data.SuccessInfo, ToastLength.Long).Show();
                     }
                     else
                     {
@@ -400,7 +408,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             item.linearLayout.SetBackgroundResource(Resource.Color.TransparentColor);
             //Так как в переменной SelectedSensorValue.Text значению датчика указывается вместе с 
             // мерой измерение, её необходимо убрать, чтобы на сервер отправлялись корректные значения датчиков
-            item.CurrentValue.Text = SelectedSensorValue.Text.Replace(item.Unit, "");
+            item.CurrentValue.Text = SelectedSensorValue.Text;
         }
 
         public bool OnTouch(View v, MotionEvent e)

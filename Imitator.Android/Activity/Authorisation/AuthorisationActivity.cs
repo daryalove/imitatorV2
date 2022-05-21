@@ -19,6 +19,7 @@ using Android;
 using Java.Security;
 using Javax.Crypto;
 using Android.Security.Keystore;
+using Android.Views;
 
 namespace Imitator.Android.Activity.Authorisation
 {
@@ -31,6 +32,7 @@ namespace Imitator.Android.Activity.Authorisation
         private string KEY_NAME = "Ahsan";
 
         private TextView AuthorisationTypeText;
+        private ProgressBar loader;
         private Button BtnAuthorisationFingerprint;
         private Button BtnAuthorisationLoginPassword;
         private Button BtnAuthorisation;
@@ -48,6 +50,7 @@ namespace Imitator.Android.Activity.Authorisation
             BtnAuthorisationFingerprint = FindViewById<Button>(Resource.Id.BtnAuthorisationFingerprint);
             BtnAuthorisationLoginPassword = FindViewById<Button>(Resource.Id.BtnAuthorisationLoginPassword);
             BtnAuthorisation = FindViewById<Button>(Resource.Id.BtnAuthorisation);
+            loader = FindViewById<ProgressBar>(Resource.Id.loader);
 
             // Эти переменные необходимы для изменения цвета кнопок BtnAuthorisationFingerprint и BtnAuthorisationLoginPassword.
             // А точнее для изменения свойства <solid ... /> в стилях ChangeAuthTypeLeftPart и ChangeAuthTypeRightPart(drawable)
@@ -119,7 +122,8 @@ namespace Imitator.Android.Activity.Authorisation
             BtnAuthorisation.Click += async (s, e) =>
             {
                 try
-                {                   
+                {
+                    loader.Visibility = ViewStates.Visible;
                     if (StaticDataClass.UserLogin != "" && StaticDataClass.UserPassword != "")
                     {
                         using (var client = ClientHelper.GetClient())
@@ -131,6 +135,7 @@ namespace Imitator.Android.Activity.Authorisation
 
                             if (o_data.Result.ToString() == "OK")
                             {
+                                loader.Visibility = ViewStates.Invisible;
                                 //Toast.MakeText(this, "Пользователь: " + o_data.UserFIO, ToastLength.Long).Show();
                                 //Toast.MakeText(this, "Информация: " + o_data.Token, ToastLength.Long).Show();
                                 Toast.MakeText(this, "Авторизация прошла успешно  !", ToastLength.Long).Show();
@@ -140,11 +145,13 @@ namespace Imitator.Android.Activity.Authorisation
                             }
                             else
                                 Toast.MakeText(this, "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                            loader.Visibility = ViewStates.Invisible;
                         }
                     }
                     else
                     {
                         Toast.MakeText(this, "Перед авторизацией необходимо ввести логин и пароль.", ToastLength.Long).Show();
+                        loader.Visibility = ViewStates.Invisible;
                     }
                 }
                 catch (Exception ex)

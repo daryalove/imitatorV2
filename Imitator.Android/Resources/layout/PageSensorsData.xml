@@ -50,7 +50,7 @@
                         android:gravity="left"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Вес"/>
+                        android:text="Вес кг"/>
 
                     <TextView
                         style="@style/TextHeader3Style"
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
-                        android:text="10 кг"/>
+                        android:text="10"/>
 
                 </LinearLayout>
                            
@@ -180,7 +180,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Вес"
+                                android:text="Вес кг"
                                 android:id="@+id/SensorWeightText"
                                 android:layout_margin="3dp"
                                 android:gravity="center"
@@ -211,7 +211,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Температура"
+                                android:text="Температура,°C"
                                 android:id="@+id/SensorTemperatureText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -234,7 +234,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Влажность"
+                                android:text="Влажность,%"
                                 android:id="@+id/SensorHumidityText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -257,7 +257,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Освещённость"
+                                android:text="Освещённость, лм"
                                 android:id="@+id/SensorIlluminationText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -280,7 +280,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Батарея"
+                                android:text="Батарея, %"
                                 android:id="@+id/SensorBatteryText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -311,5 +311,13 @@
         android:id="@+id/BtnSaveChangedSensorValues"
         android:background="@drawable/ButtonStyle"/> 
 
+    <ProgressBar
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:id="@+id/loader"
+	/>
                   
 </RelativeLayout>

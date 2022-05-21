@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:gravity="center"
-                    android:text=" Введите Ваши личне данные"/>
+                    android:text=" Введите Ваши личные данные"/>
 
     
                 <TextView
