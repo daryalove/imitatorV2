@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Imitator.CommonData.DataModels;
@@ -25,6 +21,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         private ImageButton BtnChangeContainerState;
         private ImageButton BtnChangeDoorState;
         private Button BtnSaveChangedContainerState;
+        private ImageView Image;
 
         public string PositionName { get; private set; }
 
@@ -43,6 +40,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             BtnChangeContainerState = view.FindViewById<ImageButton>(Resource.Id.BtnChangeContainerState);
             BtnChangeDoorState = view.FindViewById<ImageButton>(Resource.Id.BtnChangeDoorState);
             BtnSaveChangedContainerState = view.FindViewById<Button>(Resource.Id.BtnSaveChangedContainerState);
+            Image = view.FindViewById<ImageView>(Resource.Id.ImageContainerDoorState);
 
             BtnChangeContainerState.Click += BtnChangeContainerState_Click;
             BtnChangeDoorState.Click += BtnChangeDoorState_Click;
@@ -87,6 +85,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             if(ContainerState.Text == "Сложен")
             {
+                Image.SetImageResource(Resource.Drawable.closedBox);
                 Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
             }
             else
@@ -94,11 +93,17 @@ namespace Imitator.Android.Activity.MainFunctionality
                 switch (DoorState.Text)
                 {
                     case "Открыта":
-                        DoorState.Text = "Закрыта";
-                        return;
+                        {
+                            DoorState.Text = "Закрыта";
+                            Image.SetImageResource(Resource.Drawable.close_door);
+                            return;
+                        }
                     case "Закрыта":
-                        DoorState.Text = "Открыта";
-                        return;
+                        {
+                            DoorState.Text = "Открыта";
+                            Image.SetImageResource(Resource.Drawable.OpenDoor);
+                            return;
+                        }
                 }
             }          
         }
@@ -111,11 +116,13 @@ namespace Imitator.Android.Activity.MainFunctionality
                     ContainerState.Text = "Сложен";
                     DoorState.Text = "Закрыта";
                     BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
+                    Image.SetImageResource(Resource.Drawable.closedBox);
                     Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
                     return;
                 case "Сложен":
                     ContainerState.Text = "Разложен";
                     BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.ChangingSensorValuesButtonStyle);
+                    Image.SetImageResource(Resource.Drawable.close_door);
                     return;
             }
         }
@@ -156,8 +163,8 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                     if (o_data.Status == "0")
                     {
-                        StaticBox.Sensors["Состояние дверей"] = DoorState.Text;
-                        StaticBox.Sensors["Состояние контейнера"] = ContainerState.Text;
+                        StaticBox.Sensors["Состояние дверей"] = (DoorState.Text == "Закрыта") ? "0" : "1";
+                        StaticBox.Sensors["Состояние контейнера"] = (ContainerState.Text == "Сложен")? "0" : "1";
                         Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
                     }
                     else
@@ -211,17 +218,32 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         private void SetSensorsValue()
         {
-            if(StaticBox.Sensors["Состояние контейнера"] == "0")
+            if (StaticBox.Sensors["Состояние контейнера"] == "0")
             {
                 ContainerState.Text = "Сложен";
                 DoorState.Text = "Закрыта";
                 BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
+                Image.SetImageResource(Resource.Drawable.closedBox);
             }
             else if (StaticBox.Sensors["Состояние контейнера"] == "1")
             {
                 ContainerState.Text = "Разложен";
-                DoorState.Text = StaticBox.Sensors["Состояние дверей"] == "0" ? "Закрыта" : "Открыта";
+
+                if (StaticBox.Sensors["Состояние дверей"] == "0")
+                {
+                    DoorState.Text = "Закрыта";
+                    Image.SetBackgroundResource(Resource.Drawable.close_door);
+                }
+                else
+                {
+                    DoorState.Text = "Открыта";
+                    Image.SetBackgroundResource(Resource.Drawable.OpenDoor);
+                }
             }
+
+            var positions = Resources.GetStringArray(Resource.Array.ArrayContainerPosition);
+            var index = Array.IndexOf(positions, StaticBox.Sensors["Местоположение контейнера"]);
+            ContainerPosition.SetSelection(index);
         }
     }
 }

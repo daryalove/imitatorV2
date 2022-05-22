@@ -1,5 +1,4 @@
 ﻿using Imitator.CommonData;
-using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels;
 using Imitator.CommonData.ViewModels.Responses;
 using Imitator.CommonData.ViewModels.Responses.SmartBoxResponse;
@@ -389,7 +388,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
                 #endregion
 
                 string uri2 = editBoxIotApi + ForAnotherServer.id
-                + "&date=" + date
+                + "&date=" + date.ToString()
                 + "&sensors[Вес груза]=" + ForAnotherServer.Sensors["Вес груза"]
                 + "&sensors[Температура]=" + ForAnotherServer.Sensors["Температура"] 
                 + "&sensors[Влажность]=" + ForAnotherServer.Sensors["Влажность"] 

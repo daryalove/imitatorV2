@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/LinearLayoutContainerPosition"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -76,7 +76,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="20dp"
+                            android:paddingTop="10dp"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:id="@+id/TextContainerState"
@@ -116,7 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:paddingTop="20dp"
+                            android:paddingTop="10dp"
                             android:gravity="center"
                             android:id="@+id/TextDoorState"
                             style="@style/TextSensorsStyle"/>
