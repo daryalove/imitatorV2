@@ -23,18 +23,18 @@ namespace Imitator.Android.Activity.MainFunctionality
     {
         #region Объявление переменных пользовательсокго интерфейса
 
-        private ScrollView scrollView;
+        //private ScrollView scrollView;
         private View view;
 
         private ImageView SelectedSensorImage;
         private TextView SelectedSensorName;
         private TextView SelectedSensorValue;
 
-        //private View WeightView;
-        //private View TemperaturView;
-        //private View HumidityView;
-        //private View IlluminationView;
-        //private View BatteryView;
+        public static string WeightName = "Вес,кг";
+        public static string TempName = "Температура,°С";
+        public static string HumidityName = "Влажность,%";
+        public static string LightName = "Освещенность,лм";
+        public static string BatteryName = "Батарея,V";
 
         private CircularSeekBar seekBar;
         private ProgressBar preloader;
@@ -57,7 +57,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             view = inflater.Inflate(Resource.Layout.PageSensorsData, container, false);
-            scrollView = view.FindViewById<ScrollView>(Resource.Id.ScrollViewPageSensorsData);
+            //scrollView = view.FindViewById<ScrollView>(Resource.Id.ScrollViewPageSensorsData);
 
             try
             {
@@ -78,7 +78,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 weight.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorWeightLinearLayout);
                 weight.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorWeightValue);                
                 weight.SensorName = view.FindViewById<TextView>(Resource.Id.SensorWeightText);
-                weight.SensorName.Text = "Вес";
+                weight.SensorName.Text = WeightName;
                 weight.SensorName.Click += SelectedSensor_Click;
                 weight.CurrentValue.Text = StaticBox.Sensors["Вес груза"];
 
@@ -86,7 +86,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 temperatur.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorTemperatureLinearLayout);
                 temperatur.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorTemperatureValue);
                 temperatur.SensorName = view.FindViewById<TextView>(Resource.Id.SensorTemperatureText);
-                temperatur.SensorName.Text = "Температура,";
+                temperatur.SensorName.Text = TempName;
                 temperatur.SensorName.Click += SelectedSensor_Click;
                 temperatur.CurrentValue.Text = StaticBox.Sensors["Температура"];
 
@@ -94,7 +94,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 humidity.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorHumidityLinearLayout);
                 humidity.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorHumidityValue);
                 humidity.SensorName = view.FindViewById<TextView>(Resource.Id.SensorHumidityText);
-                humidity.SensorName.Text = "Влажность";
+                humidity.SensorName.Text = HumidityName;
                 humidity.SensorName.Click += SelectedSensor_Click;
                 humidity.CurrentValue.Text = StaticBox.Sensors["Влажность"];
 
@@ -102,7 +102,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 illumination.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorIlluminationLinearLayout);
                 illumination.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorIlluminationValue);
                 illumination.SensorName = view.FindViewById<TextView>(Resource.Id.SensorIlluminationText);
-                illumination.SensorName.Text = "Освещенность";
+                illumination.SensorName.Text = LightName;
                 illumination.SensorName.Click += SelectedSensor_Click;
                 illumination.CurrentValue.Text = StaticBox.Sensors["Освещенность"];
 
@@ -110,7 +110,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 battery.linearLayout = view.FindViewById<LinearLayout>(Resource.Id.SensorBatteryLinearLayout);
                 battery.CurrentValue = view.FindViewById<TextView>(Resource.Id.SensorBatteryValue);
                 battery.SensorName = view.FindViewById<TextView>(Resource.Id.SensorBatteryText);
-                battery.SensorName.Text = "Батарея";
+                battery.SensorName.Text = BatteryName;
                 battery.SensorName.Click += SelectedSensor_Click;
                 battery.CurrentValue.Text = StaticBox.Sensors["Уровень заряда аккумулятора"];
 
@@ -127,11 +127,11 @@ namespace Imitator.Android.Activity.MainFunctionality
                 BtnSaveChangedSensorValues.Click += BtnSaveChangedSensorValues_Click;
 
                 SelectedSensorImage.SetImageResource(Resource.Drawable.SensorTemperatureImage);
-                SelectedSensorName.Text = sensors.Find(w => w.SensorName.Text == "Температура").SensorName.Text;
+                SelectedSensorName.Text = sensors.Find(w => w.SensorName.Text == TempName).SensorName.Text;
 
 
-                seekBar.Min = sensors.Find(w => w.SensorName.Text == "Температура").MinValue;
-                seekBar.Max = sensors.Find(w => w.SensorName.Text == "Температура").MaxValue;
+                seekBar.Min = sensors.Find(w => w.SensorName.Text == TempName).MinValue;
+                seekBar.Max = sensors.Find(w => w.SensorName.Text == TempName).MaxValue;
                 AccessToSeekBar = true;
                 seekBar.SetOnTouchListener(this);
                 seekBar.ProgressChanged += SeekBar_ProgressChanged;
@@ -212,11 +212,11 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                         Sensors = new Dictionary<string, string>
                         {
-                            ["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text.Replace(",", "."),
-                            ["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text.Replace(",", "."),
-                            ["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text.Replace(",", "."),
-                            ["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text.Replace(",", "."),
-                            ["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text.Replace(",", "."),
+                            ["Вес груза"] = sensors.Find(w => w.SensorName.Text == WeightName).CurrentValue.Text.Replace(",", "."),
+                            ["Температура"] = sensors.Find(w => w.SensorName.Text == TempName).CurrentValue.Text.Replace(",", "."),
+                            ["Влажность"] = sensors.Find(w => w.SensorName.Text == HumidityName).CurrentValue.Text.Replace(",", "."),
+                            ["Освещенность"] = sensors.Find(w => w.SensorName.Text == LightName).CurrentValue.Text.Replace(",", "."),
+                            ["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == BatteryName).CurrentValue.Text.Replace(",", "."),
                             ["Уровень сигнала"] = "-8",
                             ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
                             ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
@@ -228,11 +228,11 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                     if (o_data.Status == "0")
                     {
-                        StaticBox.Sensors["Вес груза"] = sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text;
-                        StaticBox.Sensors["Температура"] = sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text;
-                        StaticBox.Sensors["Влажность"] = sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text;
-                        StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text;
-                        StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text;
+                        StaticBox.Sensors["Вес груза"] = sensors.Find(w => w.SensorName.Text == WeightName).CurrentValue.Text;
+                        StaticBox.Sensors["Температура"] = sensors.Find(w => w.SensorName.Text == TempName).CurrentValue.Text;
+                        StaticBox.Sensors["Влажность"] = sensors.Find(w => w.SensorName.Text == HumidityName).CurrentValue.Text;
+                        StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == LightName).CurrentValue.Text;
+                        StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == BatteryName).CurrentValue.Text;
                         StaticBox.Sensors["Уровень сигнала"] = "-8";
                         Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
                     }
@@ -264,8 +264,8 @@ namespace Imitator.Android.Activity.MainFunctionality
                         if (StaticBox.Sensors["Состояние контейнера"] == "0")
                         {
                             Color WeightSensorTextColor = new Color(ContextCompat.GetColor(Activity, Resource.Color.NotActivPageColor));
-                            sensors.Find(w => w.SensorName.Text == "Вес").SensorName.SetTextColor(WeightSensorTextColor);
-                            sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.SetTextColor(WeightSensorTextColor);
+                            sensors.Find(w => w.SensorName.Text == WeightName).SensorName.SetTextColor(WeightSensorTextColor);
+                            sensors.Find(w => w.SensorName.Text == WeightName).CurrentValue.SetTextColor(WeightSensorTextColor);
 
                             AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
                             alert.SetTitle("Оповещение");
@@ -277,7 +277,7 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                         SetSensorsValue(StaticBox.Sensors["Вес груза"], StaticBox.Sensors["Температура"],
                             StaticBox.Sensors["Влажность"], StaticBox.Sensors["Освещенность"], StaticBox.Sensors["Уровень заряда аккумулятора"]);
-                        Toast.MakeText(Activity, o_data.SuccessInfo, ToastLength.Long).Show();
+                        Toast.MakeText(Activity, "Данные обновлены.", ToastLength.Long).Show();
                     }
                     else
                     {
@@ -296,11 +296,11 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         private void SetSensorsValue(string weight, string temperatur, string humidity, string illumination, string battery)
         {
-            sensors.Find(w => w.SensorName.Text == "Вес").CurrentValue.Text = weight + sensors.Find(w => w.SensorName.Text == "Вес").Unit;
-            sensors.Find(w => w.SensorName.Text == "Температура").CurrentValue.Text = temperatur + sensors.Find(w => w.SensorName.Text == "Температура").Unit;
-            sensors.Find(w => w.SensorName.Text == "Влажность").CurrentValue.Text = humidity + sensors.Find(w => w.SensorName.Text == "Влажность").Unit;
-            sensors.Find(w => w.SensorName.Text == "Освещенность").CurrentValue.Text = illumination + sensors.Find(w => w.SensorName.Text == "Освещенность").Unit;
-            sensors.Find(w => w.SensorName.Text == "Батарея").CurrentValue.Text = battery + sensors.Find(w => w.SensorName.Text == "Батарея").Unit;
+            sensors.Find(w => w.SensorName.Text == WeightName).CurrentValue.Text = weight + sensors.Find(w => w.SensorName.Text == WeightName).Unit;
+            sensors.Find(w => w.SensorName.Text == TempName).CurrentValue.Text = temperatur + sensors.Find(w => w.SensorName.Text == TempName).Unit;
+            sensors.Find(w => w.SensorName.Text == HumidityName).CurrentValue.Text = humidity + sensors.Find(w => w.SensorName.Text == HumidityName).Unit;
+            sensors.Find(w => w.SensorName.Text == LightName).CurrentValue.Text = illumination + sensors.Find(w => w.SensorName.Text == LightName).Unit;
+            sensors.Find(w => w.SensorName.Text == BatteryName).CurrentValue.Text = battery + sensors.Find(w => w.SensorName.Text == BatteryName).Unit;
 
             SelectedSensorValue.Text = temperatur;
             string[] subs = SelectedSensorValue.Text.Split(' ');
@@ -376,7 +376,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             AccessToSeekBar = false;
             var text = ((TextView)sender).Text;
-            if (text == "Вес" && StaticBox.Sensors["Состояние контейнера"] == "0")
+            if (text == WeightName && StaticBox.Sensors["Состояние контейнера"] == "0")
             {
                 Toast.MakeText(Activity, "Состояние контейнера:  сложен. Невозможно изменить значение датчика веса.", ToastLength.Long).Show();
             }
@@ -413,10 +413,10 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         public bool OnTouch(View v, MotionEvent e)
         {
-            if (e.Action == MotionEventActions.Down)
-                scrollView.Enabled = false;
-            else if (e.Action == MotionEventActions.Up)
-                scrollView.Enabled = true;
+            //if (e.Action == MotionEventActions.Down)
+            //    scrollView.Enabled = false;
+            //else if (e.Action == MotionEventActions.Up)
+            //    scrollView.Enabled = true;
             return false;
         }
 

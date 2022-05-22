@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using static Android.App.ActionBar;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
@@ -32,7 +24,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             { "6","20", "Сигнал сети"},
             { "7","20", "Положение"},
             { "8","20", "Контейнер"},
-            { "9","20", "Дверь"},
+            { "9","20", "Роллета"},
             { "10","20", "Долгота"},
             { "11","20", "Широта"},
             { "12","20", "Дата/Время"}

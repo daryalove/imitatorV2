@@ -37,7 +37,8 @@ namespace Imitator.Android.Activity.Authorisation
             if (CrossSettings.Current.GetValueOrDefault("CheckedEventAuthorisation", string.Empty) != "")
             {
                 CheckedEvent = Convert.ToBoolean(CrossSettings.Current.GetValueOrDefault("CheckedEventAuthorisation", string.Empty));
-
+                UserLogin.Text = CrossSettings.Current.GetValueOrDefault("UserLoginAuthorisation", "");
+                UserPassword.Text = CrossSettings.Current.GetValueOrDefault("UserPasswordRegistration", "");
                 RememberData.Checked = CheckedEvent ? true : false;
             }            
 

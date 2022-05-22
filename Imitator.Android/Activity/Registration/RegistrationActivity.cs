@@ -14,6 +14,7 @@ using Plugin.Settings;
 using Android.Telephony;
 using Settings = Android.Provider.Settings;
 using System;
+using Android.Views;
 
 namespace Imitator.Android.Activity.Registration
 {
@@ -25,6 +26,7 @@ namespace Imitator.Android.Activity.Registration
         private EditText UserLogin;
         private EditText UserPassword;
         private Button BtnRegistration;
+        private ProgressBar Loader;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -37,6 +39,7 @@ namespace Imitator.Android.Activity.Registration
             UserLogin = FindViewById<EditText>(Resource.Id.UserLoginRegistration);
             UserPassword = FindViewById<EditText>(Resource.Id.UserPasswordRegistration);
             BtnRegistration = FindViewById<Button>(Resource.Id.BtnRegistration);
+            Loader = FindViewById<ProgressBar>(Resource.Id.loader);
 
             UserFirstName.TextChanged += UserFirstName_TextChanged;
             UserLastName.TextChanged += UserLastName_TextChanged;
@@ -75,18 +78,22 @@ namespace Imitator.Android.Activity.Registration
         {
             using (var httpClient = ClientHelper.GetClient(StaticUser.Token))
             {
+                Loader.Visibility = ViewStates.Visible;
                 SensorsService.InitializeClient(httpClient);
                 var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
 
                 if (o_data.Result.ToString() == "OK")
                 {
+                    CrossSettings.Current.AddOrUpdateValue("IMEI", StaticBox.IMEI);
                     Toast.MakeText(this, "Регистрация прошла успешно !", ToastLength.Long).Show();
 
+                    Loader.Visibility = ViewStates.Invisible;
                     Intent intent = new Intent(this, typeof(Activity.ActivityMainFunctionality));
                     StartActivity(intent);
                 }
                 else
                     Toast.MakeText(this, "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                Loader.Visibility = ViewStates.Invisible;
             }
         }
 

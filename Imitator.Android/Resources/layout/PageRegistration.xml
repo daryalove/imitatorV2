@@ -44,7 +44,7 @@
              <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
                 android:orientation="vertical"
                 android:id="@+id/LinearLayoutRegistrationDataIntup"
@@ -55,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:textSize="15sp"
                     android:text=" Введите Ваши личные данные"/>
 
     
@@ -146,43 +147,10 @@
                     android:padding="10dp"
                     android:background="@drawable/EditTextStyle"
                     android:inputType="textPassword"/>
-
-                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
-   
-                    <TextView
-                        android:layout_weight="1"
-                        style="@style/TextHeader2Style"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:gravity="left"
-                        android:layout_marginLeft="@dimen/LeftRightMarginForEditText"
-                        android:text="Сохранить данные"/>
-    
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:layout_weight="1"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"     
-                        android:id="@+id/SwitchSaveEnteredDataLoginPassword"
-                        android:thumb="@drawable/SwitchThumb"
-                        app:track="@drawable/switchtrack"
-                        android:textSize="@dimen/BaseTextSize"
-                        app:showText="true"
-                        android:textOn="Да"
-                        android:textOff="Нет"/>
-
-                </LinearLayout>
-
             </LinearLayout>
  
         
             <Button      
-                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/LinearLayoutRegistrationDataIntup"
                 android:layout_width="match_parent"
                 android:id="@+id/BtnRegistration"
@@ -200,5 +168,14 @@
         </RelativeLayout>
     
     </ScrollView>  
+
+    <ProgressBar
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:id="@+id/loader"
+	/>
     
 </RelativeLayout>

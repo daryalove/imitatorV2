@@ -17,6 +17,8 @@ namespace Imitator.Android.Activity.PersonalData
         private Button BtnPersonalDataFingerprint;
         private Button BtnPersonalDataLoginPassword;
         private Button BtnPersonalData;
+        private Button Back;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -25,6 +27,7 @@ namespace Imitator.Android.Activity.PersonalData
             BtnPersonalDataFingerprint = FindViewById<Button>(Resource.Id.BtnPersonalDataFingerprint);
             BtnPersonalDataLoginPassword = FindViewById<Button>(Resource.Id.BtnPersonalDataLoginPassword);
             BtnPersonalData = FindViewById<Button>(Resource.Id.BtnPersonalData);
+            Back = FindViewById<Button>(Resource.Id.Back);
 
             Drawable FingerprintBackground = BtnPersonalDataFingerprint.Background;
             Drawable LoginPasswordBackground = BtnPersonalDataLoginPassword.Background;
@@ -74,6 +77,12 @@ namespace Imitator.Android.Activity.PersonalData
                 {
                     Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
                 }
+            };
+
+            Back.Click += async (s, e) =>
+            {
+                Intent intent = new Intent(this, typeof(Activity.ActivityMainFunctionality));
+                StartActivity(intent);
             };
 
             BtnPersonalData.Click += async (s, e) =>
