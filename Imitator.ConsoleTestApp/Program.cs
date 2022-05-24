@@ -6,24 +6,25 @@ using Imitator.WebServices.Account;
 using Imitator.WebServices.Device;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Imitator.ConsoleTestApp
 {
     class Program
     {
+        static int TimeCount = 10000;
         static void Main(string[] args)
         {
             try
             {
                 UserModel model = new UserModel
                 {
-                    UserFIO = "Иван Иванов",
-                    Email = "nich@yandex.ru",  
-                    Password = "123456789"
+                    UserFIO = "Дятел Дятлович",
+                    Email = "hello@yandex.ru",  
+                    Password = "qwerty123"
                 };
-                //StaticBox.DeviceId = "866588031322022";
+
+                StaticBox.IMEI = "166588031322011";
                 bool showMenu = true;
                 while (showMenu)
                 {
@@ -70,88 +71,88 @@ namespace Imitator.ConsoleTestApp
                 case "1":
                     {
                         LoginUser(model.Email, model.Password).Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "2":
                     {
                         RegisterUser(model).Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "3":
                     {
                         RegisterDevice().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "4":
                     {
                         RegisterBox().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "5":
                     {
                         Console.Clear();
                         UpdateSensors().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "6":
                     {
                         Console.Clear();
                         GetSensors().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "7":
                     {
                         Console.Clear();
                         SetGps().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "8":
                     {
                         Console.Clear();
                         SetGpsMain().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "9":
                     {
                         Console.Clear();
                         UpdatePhotoRequest().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "10":
                     {
                         Console.Clear();
                         SearchCommandPhoto().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "11":
                     {
                         Console.Clear();
                         CancelAlarm().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "12":
                     {
                         Console.Clear();
                         SetAlarm().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "13":
                     {
                         Console.Clear();
                         LogOut().Wait();
-                        System.Threading.Thread.Sleep(20000);
+                        System.Threading.Thread.Sleep(TimeCount);
                         return true;
                     }
                 case "14":
@@ -169,15 +170,19 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task SetAlarm()
         {
-            var o_data = await SensorsService.MakeRequestAlarm("2");
-
-            if (o_data.Status.ToString() == "0")
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
+                SensorsService.InitializeClient(client);
+                var o_data = await SensorsService.MakeRequestAlarm("2");
 
-                Console.WriteLine(o_data.ResponseData.Message);
+                if (o_data.Status.ToString() == "0")
+                {
+
+                    Console.WriteLine(o_data.ResponseData.Message);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.Message);
             }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.Message);
         }
 
         /// <summary>
@@ -186,15 +191,19 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task CancelAlarm()
         {
-            var o_data = await SensorsService.CancelAlarm("2");
-
-            if (o_data.Status.ToString() == "0")
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
+                SensorsService.InitializeClient(client);
+                var o_data = await SensorsService.CancelAlarm("2");
 
-                Console.WriteLine(o_data.ResponseData.Message);
+                if (o_data.Status.ToString() == "0")
+                {
+
+                    Console.WriteLine(o_data.ResponseData.Message);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.Message);
             }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.Message);
         }
 
         /// <summary>
@@ -228,7 +237,7 @@ namespace Imitator.ConsoleTestApp
             using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
                 SensorsService.InitializeClient(client);
-                var o_data = await SensorsService.UpdatePhotoRequest("866588031322022"/*StaticBox.IMEI*/);
+                var o_data = await SensorsService.UpdatePhotoRequest(StaticBox.IMEI);
 
                 if (o_data.Result.ToString() == "OK")
                 {
@@ -246,22 +255,22 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task SetGpsMain()
         {
-            BoxLocation loc = new BoxLocation
-            {
-                date = DateTime.Now,
-                lat1 = "42.3434",
-                lon1 = "33.001",
-                id = StaticBox.IMEI
-            };
-            var o_data = await LocationService.SetLocation(loc);
+            //BoxLocation loc = new BoxLocation
+            //{
+            //    date = DateTime.Now,
+            //    lat1 = "42.3434",
+            //    lon1 = "33.001",
+            //    id = StaticBox.IMEI
+            //};
+            //var o_data = await LocationService.SetLocation(loc);
 
-            if (o_data.Status == "0")
-            {
+            //if (o_data.Status == "0")
+            //{
 
-                Console.WriteLine(o_data.Message);
-            }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.Message);
+            //    Console.WriteLine(o_data.Message);
+            //}
+            //else
+            //    Console.WriteLine("Something is wrong: " + o_data.Message);
         }
 
         /// <summary>
@@ -303,13 +312,13 @@ namespace Imitator.ConsoleTestApp
                 SensorsService.InitializeClient(client);
                 DeviceModel model = new DeviceModel
                 {
-                    Idiom = "Phone",
-                    IMEI = StaticBox.IMEIs["5"],
+                    Idiom = "Mac",
+                    IMEI = StaticBox.IMEI,
                     Manufacturer = "Samsung",
-                    ModelName = "SMG-950U",
+                    ModelName = "SMG-950k",
                     Name = "Motz's iPhone",
                     Platform = "Android",
-                    Version = "7.0"
+                    Version = "12.0"
                 };
                 var o_data = await SensorsService.RegisterDevice(model);
 
@@ -330,15 +339,19 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task RegisterBox()
         {
-            var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
-
-            if (o_data.Result.ToString() == "OK")
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
-                
-                Console.WriteLine(o_data.SuccessInfo);
+                SensorsService.InitializeClient(client);
+                var o_data = await SensorsService.RegisterBox(StaticBox.IMEI);
+
+                if (o_data.Result.ToString() == "OK")
+                {
+
+                    Console.WriteLine(o_data.SuccessInfo);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.ErrorInfo);
             }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.ErrorInfo);
         }
 
         /// <summary>
@@ -347,46 +360,51 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task UpdateSensors()
         {
-       //< item > На складе </ item >
-       //   < item > На автомобиле </ item >
-       //      < item > У заказчика </ item >
+            //< item > На складе </ item >
+            //   < item > На автомобиле </ item >
+            //      < item > У заказчика </ item >
 
-            StaticBox.Sensors["Вес груза"] = "1290.34";
-            StaticBox.Sensors["Температура"] = "19";
-            StaticBox.Sensors["Влажность"] = "10";
-            StaticBox.Sensors["Освещенность"] = "1";
-            StaticBox.Sensors["Уровень заряда аккумулятора"] = "14";
-            StaticBox.Sensors["Уровень сигнала"] = "-8";
-            StaticBox.Sensors["Состояние дверей"] = "1";
-            StaticBox.Sensors["Состояние контейнера"] = "0";
-            StaticBox.Sensors["Местоположение контейнера"] = "На складе";
-
-            EditBoxViewModel ForAnotherServer = new EditBoxViewModel
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
-                id = "866588031322022",
+                SensorsService.InitializeClient(client);
 
-                Sensors = new Dictionary<string, string>
+                StaticBox.Sensors["Вес груза"] = "1290.34";
+                StaticBox.Sensors["Температура"] = "19";
+                StaticBox.Sensors["Влажность"] = "10";
+                StaticBox.Sensors["Освещенность"] = "1";
+                StaticBox.Sensors["Уровень заряда аккумулятора"] = "14";
+                StaticBox.Sensors["Уровень сигнала"] = "-8";
+                StaticBox.Sensors["Состояние дверей"] = "1";
+                StaticBox.Sensors["Состояние контейнера"] = "0";
+                StaticBox.Sensors["Местоположение контейнера"] = "На складе";
+
+                EditBoxViewModel ForAnotherServer = new EditBoxViewModel
                 {
-                    ["Вес груза"] = StaticBox.Sensors["Вес груза"],
-                    ["Температура"] = StaticBox.Sensors["Температура"],
-                    ["Влажность"] = StaticBox.Sensors["Влажность"],
-                    ["Освещенность"] = StaticBox.Sensors["Освещенность"],
-                    ["Уровень заряда аккумулятора"] = StaticBox.Sensors["Уровень заряда аккумулятора"],
-                    ["Уровень сигнала"] = StaticBox.Sensors["Уровень сигнала"],
-                    ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
-                    ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
-                    ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
-                },
-            };
-            var o_data = await SensorsService.EditBox(ForAnotherServer);
+                    id = StaticBox.IMEI,
 
-            if (o_data.Status == "0")
-            {
+                    Sensors = new Dictionary<string, string>
+                    {
+                        ["Вес груза"] = StaticBox.Sensors["Вес груза"],
+                        ["Температура"] = StaticBox.Sensors["Температура"],
+                        ["Влажность"] = StaticBox.Sensors["Влажность"],
+                        ["Освещенность"] = StaticBox.Sensors["Освещенность"],
+                        ["Уровень заряда аккумулятора"] = StaticBox.Sensors["Уровень заряда аккумулятора"],
+                        ["Уровень сигнала"] = StaticBox.Sensors["Уровень сигнала"],
+                        ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
+                        ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
+                        ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
+                    },
+                };
+                var o_data = await SensorsService.EditBox(ForAnotherServer);
 
-                Console.WriteLine(o_data.Message);
+                if (o_data.Status == "0")
+                {
+
+                    Console.WriteLine(o_data.Message);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.Message);
             }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.Message);
         }
 
         /// <summary>
@@ -395,15 +413,20 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task GetSensors()
         {
-            var o_data = await SensorsService.GetInfoBox(StaticBox.IMEI);
-
-            if (o_data.Result.ToString() == "OK")
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
             {
+                SensorsService.InitializeClient(client);
 
-                Console.WriteLine(o_data.SuccessInfo);
+                var o_data = await SensorsService.GetInfoBox(StaticBox.IMEI);
+
+                if (o_data.Result.ToString() == "OK")
+                {
+
+                    Console.WriteLine(o_data.SuccessInfo);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.ErrorInfo);
             }
-            else
-                Console.WriteLine("Something is wrong: " + o_data.ErrorInfo);
         }
 
         /// <summary>

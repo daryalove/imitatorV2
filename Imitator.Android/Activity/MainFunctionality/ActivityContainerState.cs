@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels.Responses;
+using Imitator.WebServices;
 using Imitator.WebServices.Device;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
+    [Obsolete]
     public class ActivityContainerState : Fragment
     {
         private Spinner ContainerPosition;
@@ -23,6 +20,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         private ImageButton BtnChangeContainerState;
         private ImageButton BtnChangeDoorState;
         private Button BtnSaveChangedContainerState;
+        private ImageView Image;
 
         public string PositionName { get; private set; }
 
@@ -41,6 +39,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             BtnChangeContainerState = view.FindViewById<ImageButton>(Resource.Id.BtnChangeContainerState);
             BtnChangeDoorState = view.FindViewById<ImageButton>(Resource.Id.BtnChangeDoorState);
             BtnSaveChangedContainerState = view.FindViewById<Button>(Resource.Id.BtnSaveChangedContainerState);
+            Image = view.FindViewById<ImageView>(Resource.Id.ImageContainerDoorState);
 
             BtnChangeContainerState.Click += BtnChangeContainerState_Click;
             BtnChangeDoorState.Click += BtnChangeDoorState_Click;
@@ -85,6 +84,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             if(ContainerState.Text == "Сложен")
             {
+                Image.SetImageResource(Resource.Drawable.closed_box);
                 Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
             }
             else
@@ -92,11 +92,17 @@ namespace Imitator.Android.Activity.MainFunctionality
                 switch (DoorState.Text)
                 {
                     case "Открыта":
-                        DoorState.Text = "Закрыта";
-                        return;
+                        {
+                            DoorState.Text = "Закрыта";
+                            Image.SetImageResource(Resource.Drawable.close_door);
+                            return;
+                        }
                     case "Закрыта":
-                        DoorState.Text = "Открыта";
-                        return;
+                        {
+                            DoorState.Text = "Открыта";
+                            Image.SetImageResource(Resource.Drawable.OpenDoor);
+                            return;
+                        }
                 }
             }          
         }
@@ -109,11 +115,13 @@ namespace Imitator.Android.Activity.MainFunctionality
                     ContainerState.Text = "Сложен";
                     DoorState.Text = "Закрыта";
                     BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
+                    Image.SetImageResource(Resource.Drawable.closed_box);
                     Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
                     return;
                 case "Сложен":
                     ContainerState.Text = "Разложен";
                     BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.ChangingSensorValuesButtonStyle);
+                    Image.SetImageResource(Resource.Drawable.close_door);
                     return;
             }
         }
@@ -128,35 +136,48 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             try
             {
-                EditBoxViewModel ForAnotherServer = new EditBoxViewModel
-                {
-                    id = "866588031322022",
+                StaticBox.Sensors["Состояние дверей"] = (DoorState.Text == "Закрыта") ? "0" : "1";
+                StaticBox.Sensors["Состояние контейнера"] = (ContainerState.Text == "Сложен") ? "0" : "1";
+                StaticBox.Sensors["Местоположение контейнера"] = PositionName;
 
-                    Sensors = new Dictionary<string, string>
+                using (var client = ClientHelper.GetClient(StaticUser.Token))
+                {
+                    SensorsService.InitializeClient(client);
+
+                    EditBoxViewModel ForAnotherServer = new EditBoxViewModel
                     {
-                        ["Вес груза"] = StaticBox.Sensors["Вес груза"],
-                        ["Температура"] = StaticBox.Sensors["Температура"],
-                        ["Влажность"] = StaticBox.Sensors["Влажность"],
-                        ["Освещенность"] = StaticBox.Sensors["Освещенность"],
-                        ["Уровень заряда аккумулятора"] = StaticBox.Sensors["Уровень заряда аккумулятора"],
-                        ["Уровень сигнала"] = StaticBox.Sensors["Уровень сигнала"],
-                        ["Состояние дверей"] = DoorState.Text,
-                        ["Состояние контейнера"] = ContainerState.Text,
-                        ["Местоположение контейнера"] = PositionName
-                    },
-                };
+                        //id = "866588031322022",
+                        id = StaticBox.IMEI,
+                        Sensors = new Dictionary<string, string>
+                        {
+                            ["Вес груза"] = StaticBox.Sensors["Вес груза"],
+                            ["Температура"] = StaticBox.Sensors["Температура"],
+                            ["Влажность"] = StaticBox.Sensors["Влажность"],
+                            ["Освещенность"] = StaticBox.Sensors["Освещенность"],
+                            ["Уровень заряда аккумулятора"] = StaticBox.Sensors["Уровень заряда аккумулятора"],
+                            ["Уровень сигнала"] = StaticBox.Sensors["Уровень сигнала"],
+                            ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
+                            ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
+                            ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
+                        },
+                    };
 
-                var o_data = await SensorsService.EditBox(ForAnotherServer);
+                    var o_data = await SensorsService.EditBox(ForAnotherServer);
 
-                if (o_data.Status == "0")
-                {
-                    StaticBox.Sensors["Состояние дверей"] = DoorState.Text;
-                    StaticBox.Sensors["Состояние контейнера"] = ContainerState.Text;
-                    Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
+                    if (o_data.Status == "0")
+                    {
+                        Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
+
+                        StaticBox.CameraOpenOrNo = 1;
+
+                        ActivityPhotographicRecording ContentPhotographicRecording = new ActivityPhotographicRecording();
+                        FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+                        transaction.Replace(Resource.Id.framelayoutFormMainFunctionality, ContentPhotographicRecording).AddToBackStack(null).Commit();
+                    }
+                    else
+                        Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
+                            "Ошибка: " + o_data.Message, ToastLength.Long).Show();
                 }
-                else
-                    Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
-                        "Ошибка: " + o_data.Message, ToastLength.Long).Show();
             }
             catch (System.Exception ex)
             {
@@ -168,28 +189,32 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             try
             {
-                var o_data = await SensorsService.GetInfoBox("866588031322022");
-
-                if (o_data.Result.ToString() == "OK")
+                using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
-                    if (StaticBox.Sensors["Состояние контейнера"] == "0")
+                    SensorsService.InitializeClient(client);
+                    var o_data = await SensorsService.GetInfoBox(StaticBox.IMEI);
+
+                    if (o_data.Result.ToString() == "OK")
                     {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
-                        alert.SetTitle("Оповещение");
-                        alert.SetMessage("Состояние контейнера:  сложен. Невозможно открыть либо закрыть дверь.");
-                        alert.SetPositiveButton("Ок", (senderAlert, args) => { });
-                        Dialog dialog = alert.Create();
-                        dialog.Show();
-                    }
+                        if (StaticBox.Sensors["Состояние контейнера"] == "0")
+                        {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
+                            alert.SetTitle("Оповещение");
+                            alert.SetMessage("Состояние контейнера:  сложен. Невозможно открыть либо закрыть дверь.");
+                            alert.SetPositiveButton("Ок", (senderAlert, args) => { });
+                            Dialog dialog = alert.Create();
+                            dialog.Show();
+                        }
 
-                    SetSensorsValue();
-                }
-                else
-                {
-                    ContainerState.Text = "Не известно";
-                    DoorState.Text = "Не известно";
-                    Toast.MakeText(Activity, "Не удалось получить значения датчиков. " +
-                        "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                        SetSensorsValue();
+                    }
+                    else
+                    {
+                        ContainerState.Text = "Не известно";
+                        DoorState.Text = "Не известно";
+                        Toast.MakeText(Activity, "Не удалось получить значения датчиков. " +
+                            "Ошибка: " + o_data.ErrorInfo, ToastLength.Long).Show();
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -200,17 +225,32 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         private void SetSensorsValue()
         {
-            if(StaticBox.Sensors["Состояние контейнера"] == "0")
+            if (StaticBox.Sensors["Состояние контейнера"] == "0")
             {
                 ContainerState.Text = "Сложен";
                 DoorState.Text = "Закрыта";
                 BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
+                Image.SetImageResource(Resource.Drawable.closed_box);
             }
             else if (StaticBox.Sensors["Состояние контейнера"] == "1")
             {
                 ContainerState.Text = "Разложен";
-                DoorState.Text = StaticBox.Sensors["Состояние дверей"] == "0" ? "Закрыта" : "Открыта";
+
+                if (StaticBox.Sensors["Состояние дверей"] == "0")
+                {
+                    DoorState.Text = "Закрыта";
+                    Image.SetBackgroundResource(Resource.Drawable.close_door);
+                }
+                else
+                {
+                    DoorState.Text = "Открыта";
+                    Image.SetBackgroundResource(Resource.Drawable.OpenDoor);
+                }
             }
+
+            var positions = Resources.GetStringArray(Resource.Array.ArrayContainerPosition);
+            var index = Array.IndexOf(positions, StaticBox.Sensors["Местоположение контейнера"]);
+            ContainerPosition.SetSelection(index);
         }
     }
 }

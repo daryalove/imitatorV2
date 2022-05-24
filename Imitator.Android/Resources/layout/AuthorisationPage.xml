@@ -32,7 +32,7 @@
 
             <TextView
                 android:gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="23dp"
                 android:textSize="35dp"
                 android:textColor="@color/TextColor"
                 android:layout_below="@+id/TxtAppName"
@@ -43,7 +43,7 @@
 
             <TextView
                 android:gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/TxtAuthorisation"
                 android:id="@+id/AuthorisationTypeText"
                 android:textColor="@color/TextColor"
@@ -55,7 +55,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:id="@+id/LinearLayoutFragment"
                 android:layout_below="@+id/AuthorisationTypeText">
             
@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/LinearLayoutFragment"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="30dp"
                 android:id="@+id/LinearLayoutChangeAuthType"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
@@ -101,7 +101,6 @@
              </LinearLayout>
 
              <Button      
-                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/LinearLayoutChangeAuthType"
                 android:layout_width="match_parent"
                 android:id="@+id/BtnAuthorisation"
@@ -120,6 +119,15 @@
         </RelativeLayout>
     
     </ScrollView>
+
+     <ProgressBar
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:id="@+id/loader"
+	/>
 
 
 </RelativeLayout>

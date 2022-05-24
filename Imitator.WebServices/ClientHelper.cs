@@ -1,6 +1,4 @@
-﻿using Plugin.Settings;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,7 +7,7 @@ namespace Imitator.WebServices
 {
     public class ClientHelper
     {
-        public const string URL = "https://iot.tmc-centert.ru/api/imitator/";
+        public const string URL = "http://iot.tmc-centert.ru/api/";
 
         public static HttpClient GetClient()
         {

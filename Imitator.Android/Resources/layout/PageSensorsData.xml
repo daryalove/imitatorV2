@@ -7,15 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView   
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/ScrollViewPageSensorsData"
-        android:layout_above="@+id/BtnSaveChangedSensorValues">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,7 +41,7 @@
                         android:gravity="left"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Вес"/>
+                        android:text="Вес кг"/>
 
                     <TextView
                         style="@style/TextHeader3Style"
@@ -62,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
-                        android:text="10 кг"/>
+                        android:text="10"/>
 
                 </LinearLayout>
                            
@@ -143,6 +134,7 @@
                     android:paddingLeft="10dp"
                     android:id="@+id/TextSensorList"
                     android:gravity="left"
+                    android:textSize="20dp"
                     android:text="Выбор датчика"
                     style="@style/TextHeader3Style"/>
                 <View
@@ -155,7 +147,7 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="6dp"
                     android:layout_height="wrap_content"
                     android:background="@color/TransparentColor"
                     android:padding="5dp"
@@ -164,7 +156,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:padding="8dp"
                         android:orientation = "horizontal">
 
                         <LinearLayout
@@ -180,7 +172,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Вес"
+                                android:text="Вес кг"
                                 android:id="@+id/SensorWeightText"
                                 android:layout_margin="3dp"
                                 android:gravity="center"
@@ -211,7 +203,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Температура"
+                                android:text="Температура,°C"
                                 android:id="@+id/SensorTemperatureText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -234,7 +226,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Влажность"
+                                android:text="Влажность,%"
                                 android:id="@+id/SensorHumidityText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -257,7 +249,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Освещённость"
+                                android:text="Освещённость, лм"
                                 android:id="@+id/SensorIlluminationText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -280,7 +272,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Батарея"
+                                android:text="Батарея, %"
                                 android:id="@+id/SensorBatteryText"
                                 style="@style/TextSensorsStyle"/>
                             <TextView
@@ -297,8 +289,6 @@
             </RelativeLayout>
         
         </LinearLayout>      
-
-    </ScrollView>   
     
      <Button
         android:layout_width="match_parent"
@@ -311,5 +301,13 @@
         android:id="@+id/BtnSaveChangedSensorValues"
         android:background="@drawable/ButtonStyle"/> 
 
+    <ProgressBar
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:id="@+id/loader"
+	/>
                   
 </RelativeLayout>

@@ -1,14 +1,12 @@
 ﻿using Imitator.CommonData;
 using Imitator.CommonData.ViewModels;
+using Imitator.CommonData.ViewModels.Responses;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Text;
-using Imitator.CommonData.ViewModels.Responses;
 
 namespace Imitator.WebServices.Account
 {
@@ -42,7 +40,7 @@ namespace Imitator.WebServices.Account
 
                 var password = WebUtility.UrlEncode(userPassword); 
               
-                HttpResponseMessage response = await _httpClient.PostAsync($"loginuser?email={username}&userpassword={userPassword}", formContent);
+                HttpResponseMessage response = await _httpClient.PostAsync($"imitator/loginuser?email={username}&userpassword={userPassword}", formContent);
 
                 string s_result;
                 using (HttpContent responseContent = response.Content)
@@ -91,7 +89,7 @@ namespace Imitator.WebServices.Account
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"logoutuser");
+                HttpResponseMessage response = await _httpClient.GetAsync($"imitator/logoutuser");
                 string s_result;
                 using (HttpContent responseContent = response.Content)
                 {
@@ -150,7 +148,7 @@ namespace Imitator.WebServices.Account
                     });
             
                
-                HttpResponseMessage response = await _httpClient.PostAsync($"registeruser?UserFIO={model.UserFIO}&Email={model.Email}&Password={ model.Password}", formContent);
+                HttpResponseMessage response = await _httpClient.PostAsync($"imitator/registeruser?UserFIO={model.UserFIO}&Email={model.Email}&Password={ model.Password}", formContent);
 
                 string s_result;
                 using (HttpContent responseContent = response.Content)

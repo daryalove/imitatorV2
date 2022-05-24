@@ -10,6 +10,7 @@ using Imitator.Android.Activity.PersonalData;
 using Imitator.CommonData.DataModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Account;
+using Plugin.Settings;
 using AlertDialog = Android.App.AlertDialog;
 using Toast = Android.Widget.Toast;
 using ToastLength = Android.Widget.ToastLength;
@@ -31,6 +32,8 @@ namespace Imitator.Android.Activity
                 Toolbar toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
                 SetSupportActionBar(toolbar);
                 SupportActionBar.Title = "Имитатор";
+
+                StaticBox.IMEI = CrossSettings.Current.GetValueOrDefault("IMEI", "");
 
                 BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.NavigationFormMainFunctionality);
 
@@ -147,6 +150,8 @@ namespace Imitator.Android.Activity
 
                 if (o_data.Result.ToString() == "OK")
                 {
+                    StaticBox.Sensors["Уровень заряда аккумулятора"] = "";
+
                     Intent page = new Intent(this, typeof(MainActivity));
                     StartActivity(page);
                     this.Finish();
