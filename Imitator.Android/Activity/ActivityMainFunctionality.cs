@@ -150,6 +150,8 @@ namespace Imitator.Android.Activity
 
                 if (o_data.Result.ToString() == "OK")
                 {
+                    StaticBox.Sensors["Уровень заряда аккумулятора"] = "";
+
                     Intent page = new Intent(this, typeof(MainActivity));
                     StartActivity(page);
                     this.Finish();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.OS;
 using Android.Views;
@@ -85,7 +84,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             if(ContainerState.Text == "Сложен")
             {
-                Image.SetImageResource(Resource.Drawable.closedBox);
+                Image.SetImageResource(Resource.Drawable.closed_box);
                 Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
             }
             else
@@ -116,7 +115,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                     ContainerState.Text = "Сложен";
                     DoorState.Text = "Закрыта";
                     BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
-                    Image.SetImageResource(Resource.Drawable.closedBox);
+                    Image.SetImageResource(Resource.Drawable.closed_box);
                     Toast.MakeText(Activity, "Состояние контейнера:  Сложен. Невозможно открыть либо закрыть дверь.", ToastLength.Long).Show();
                     return;
                 case "Сложен":
@@ -137,6 +136,10 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             try
             {
+                StaticBox.Sensors["Состояние дверей"] = (DoorState.Text == "Закрыта") ? "0" : "1";
+                StaticBox.Sensors["Состояние контейнера"] = (ContainerState.Text == "Сложен") ? "0" : "1";
+                StaticBox.Sensors["Местоположение контейнера"] = PositionName;
+
                 using (var client = ClientHelper.GetClient(StaticUser.Token))
                 {
                     SensorsService.InitializeClient(client);
@@ -153,9 +156,9 @@ namespace Imitator.Android.Activity.MainFunctionality
                             ["Освещенность"] = StaticBox.Sensors["Освещенность"],
                             ["Уровень заряда аккумулятора"] = StaticBox.Sensors["Уровень заряда аккумулятора"],
                             ["Уровень сигнала"] = StaticBox.Sensors["Уровень сигнала"],
-                            ["Состояние дверей"] = DoorState.Text,
-                            ["Состояние контейнера"] = ContainerState.Text,
-                            ["Местоположение контейнера"] = PositionName
+                            ["Состояние дверей"] = StaticBox.Sensors["Состояние дверей"],
+                            ["Состояние контейнера"] = StaticBox.Sensors["Состояние контейнера"],
+                            ["Местоположение контейнера"] = StaticBox.Sensors["Местоположение контейнера"]
                         },
                     };
 
@@ -163,9 +166,13 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                     if (o_data.Status == "0")
                     {
-                        StaticBox.Sensors["Состояние дверей"] = (DoorState.Text == "Закрыта") ? "0" : "1";
-                        StaticBox.Sensors["Состояние контейнера"] = (ContainerState.Text == "Сложен")? "0" : "1";
                         Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
+
+                        StaticBox.CameraOpenOrNo = 1;
+
+                        ActivityPhotographicRecording ContentPhotographicRecording = new ActivityPhotographicRecording();
+                        FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+                        transaction.Replace(Resource.Id.framelayoutFormMainFunctionality, ContentPhotographicRecording).AddToBackStack(null).Commit();
                     }
                     else
                         Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
@@ -223,7 +230,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                 ContainerState.Text = "Сложен";
                 DoorState.Text = "Закрыта";
                 BtnChangeDoorState.SetBackgroundResource(Resource.Drawable.NotAllowChangingSensorValuesButtonStyle);
-                Image.SetImageResource(Resource.Drawable.closedBox);
+                Image.SetImageResource(Resource.Drawable.closed_box);
             }
             else if (StaticBox.Sensors["Состояние контейнера"] == "1")
             {

@@ -11,14 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
             
-        <TableLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+          <TableLayout
             android:layout_centerHorizontal="true"
             android:id="@+id/SensorsValueTable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:stretchColumns="*"/>
-          
+
+          <ImageView
+	        android:layout_width="146dp"
+            android:layout_height="260dp"
+            android:layout_marginTop = "10dp"
+	        android:id="@+id/photobox"
+	        android:layout_below="@+id/SensorsValueTable"
+	        android:layout_centerInParent="true" />
+        </RelativeLayout>
     </ScrollView>
 
 </LinearLayout>

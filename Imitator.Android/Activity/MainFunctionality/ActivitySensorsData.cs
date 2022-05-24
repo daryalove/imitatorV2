@@ -228,13 +228,14 @@ namespace Imitator.Android.Activity.MainFunctionality
 
                     if (o_data.Status == "0")
                     {
+                        Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
+
                         StaticBox.Sensors["Вес груза"] = sensors.Find(w => w.SensorName.Text == WeightName).CurrentValue.Text;
                         StaticBox.Sensors["Температура"] = sensors.Find(w => w.SensorName.Text == TempName).CurrentValue.Text;
                         StaticBox.Sensors["Влажность"] = sensors.Find(w => w.SensorName.Text == HumidityName).CurrentValue.Text;
                         StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == LightName).CurrentValue.Text;
                         StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == BatteryName).CurrentValue.Text;
                         StaticBox.Sensors["Уровень сигнала"] = "-8";
-                        Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
                     }
                     else
                         Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
