@@ -4,7 +4,6 @@ using Android.Gms.Common;
 using Android.Gms.Location;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
-using Android.Graphics;
 using Android.OS;
 using Android.Util;
 using Android.Views;
@@ -14,7 +13,6 @@ using Imitator.CommonData.DataModels;
 using Imitator.CommonData.ViewModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Device;
-using Plugin.Settings;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
@@ -23,6 +21,9 @@ namespace Imitator.Android.Activity.MainFunctionality
     {
         private MapView mMapView = null;
         private static TextView txtLongitude;
+        private static TextView txtLatitude;
+        private static TextView txtDateTime;
+        private static TextView txtId;
 
         private const string SavedStateActionBarHidden = "saved_state_action_bar_hidden";
 
@@ -41,7 +42,10 @@ namespace Imitator.Android.Activity.MainFunctionality
             var view = inflater.Inflate(Resource.Layout.PageMap, container, false);
 
             var layout = view.FindViewById<SlidingUpPanelLayout>(Resource.Id.sliding_layout);
-            //txtLongitude = view.FindViewById<TextView>(Resource.Id.TxtLongitude);
+            txtLongitude = view.FindViewById<TextView>(Resource.Id.txtLongitude);
+            txtLatitude = view.FindViewById<TextView>(Resource.Id.txtLatitude);
+            txtDateTime = view.FindViewById<TextView>(Resource.Id.txtDate);
+            txtId = view.FindViewById<TextView>(Resource.Id.txtBoxId);
 
             layout.AnchorPoint = 0.3f;
             layout.PanelExpanded += (s, e) => Log.Info(Tag, "PanelExpanded");
@@ -212,10 +216,11 @@ namespace Imitator.Android.Activity.MainFunctionality
                     StaticBox.Longitude = result.LastLocation.Longitude;
                     StaticBox.CurrentDate = DateTime.Now;
 
-                    //txtLongitude.Text = result.LastLocation.Longitude.ToString();
-                    //s_latitude.Text = result.LastLocation.Longitude.ToString();
-                    //s_date_time.Text = DateTime.Now.ToString();
-
+                    txtLongitude.Text = result.LastLocation.Longitude.ToString();
+                    txtLatitude.Text = result.LastLocation.Latitude.ToString();
+                    txtDateTime.Text = StaticBox.CurrentDate.ToString();
+                    txtId.Text = StaticBox.IMEI;
+                   
                     PostGeoData();
                 }
                 catch (Exception ex)

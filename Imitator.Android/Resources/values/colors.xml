@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2c3e50</color>
+		<color name="TealBlue">#043E63</color>
+		<color name="Tangaroa">#041D32</color>
+		<color name="JellyBean">#80226C97</color>
+    <color name="TransRowBlue">#33043E63</color>
     <color name="colorPrimaryDark">#1B3147</color>
     <color name="colorAccent">#3498db</color>
+  <color name="TransMainRow">#50008577</color>
 	<color name="BackgroundColor">#2E8B57</color>
 	<color name="StrokeColor">#2E8B57</color>
+  <color name="TransGreenStrokeColor">#3498db</color>
 	<color name="EventNotAllowColor">#c22121</color>
 	<color name="NotActivPageColor">#7f8280</color>	
 	<color name="TextColor">#e6e9f0</color>
