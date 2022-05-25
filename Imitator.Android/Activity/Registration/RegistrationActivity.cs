@@ -85,6 +85,7 @@ namespace Imitator.Android.Activity.Registration
                 if (o_data.Result.ToString() == "OK")
                 {
                     CrossSettings.Current.AddOrUpdateValue("IMEI", StaticBox.IMEI);
+                    CrossSettings.Current.AddOrUpdateValue("DeviceId", StaticBox.DeviceId);
                     Toast.MakeText(this, "Регистрация прошла успешно !", ToastLength.Long).Show();
 
                     Loader.Visibility = ViewStates.Invisible;

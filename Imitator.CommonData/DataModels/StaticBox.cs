@@ -54,5 +54,7 @@ namespace Imitator.CommonData.DataModels
 
         static public List<ContainerResponse> Objects { get; set; }
         public static int CameraOpenOrNo { get; set; }
+        public static bool IsStoppedGeo { get; set; }
+        public static DateTime CurrentDate { get; set; }
     }
 }

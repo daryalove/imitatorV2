@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Имитатор</string>
     <string name="project_name">SmartBoxCity</string>
+    <string name="google_key">AIzaSyC-Xr7NjKh4zLw642p8A7cRjpYwfsfnm7Y</string>
   
     <string name="title_sensors_data">Датчики</string>
     <string name="title_map">Местоположение</string>
