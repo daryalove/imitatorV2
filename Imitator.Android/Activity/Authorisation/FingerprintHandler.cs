@@ -5,6 +5,12 @@ using Android.Hardware.Fingerprints;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Widget;
+using Imitator.CommonData.DataModels;
+using Imitator.CommonData.ViewModels;
+using Imitator.WebServices;
+using Imitator.WebServices.Account;
+using Plugin.Settings;
+using System;
 using _Activity = Android.App.Activity;
 
 namespace Imitator.Android.Activity.Authorisation
@@ -31,12 +37,36 @@ namespace Imitator.Android.Activity.Authorisation
             Toast.MakeText(ParentActivity, "Ошибка авторизации по отпечатку пальца!", ToastLength.Long).Show();
         }
 
-        public override void OnAuthenticationSucceeded(FingerprintManager.AuthenticationResult result)
+        public async override void OnAuthenticationSucceeded(FingerprintManager.AuthenticationResult result)
         {
-            //this.ParentActivity.StartActivity(new Intent(mainActivity, typeof(HomeActivity)));
-            Intent intent = new Intent(ParentActivity, typeof(ActivityMainFunctionality));
-            ParentActivity.StartActivity(intent);
-            Toast.MakeText(ParentActivity, "Авторизация прошла успешно !", ToastLength.Long).Show();
+            try
+            {
+                using (var client = ClientHelper.GetClient())
+                {
+                    AuthService.InitializeClient(client);
+                    UserShortModel o_data = null;
+
+                    var login = CrossSettings.Current.GetValueOrDefault("UserLoginRegistration", "");
+                    var password = CrossSettings.Current.GetValueOrDefault("UserPasswordRegistration", ""); 
+
+                    o_data = await AuthService.Login(login, password);
+
+                    if (o_data.Result.ToString() == "OK")
+                    {
+                        Toast.MakeText(ParentActivity, "Авторизация прошла успешно !", ToastLength.Long).Show();
+                        StaticUser.Token = o_data.Token;
+
+                        Intent intent = new Intent(ParentActivity, typeof(ActivityMainFunctionality));
+                        ParentActivity.StartActivity(intent);
+                    }
+                    else
+                        Toast.MakeText(ParentActivity, "Попробуйте повторить вход. " + o_data.ErrorInfo, ToastLength.Long).Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(ParentActivity, "Попробуйте повторить вход. " + ex.Message, ToastLength.Long).Show();
+            }
         }
     }
 }

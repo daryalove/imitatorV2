@@ -44,7 +44,7 @@ namespace Imitator.Android.Activity
                 SupportActionBar.Title = "Имитатор";
 
                 StaticBox.IMEI = CrossSettings.Current.GetValueOrDefault("IMEI", "");
-                //StaticBox.DeviceId = Guid.Parse(CrossSettings.Current.GetValueOrDefault("DeviceId", ""));
+                StaticBox.DeviceId = Guid.Parse(CrossSettings.Current.GetValueOrDefault("DeviceId", Guid.Empty.ToString()));
 
                 BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.NavigationFormMainFunctionality);
 

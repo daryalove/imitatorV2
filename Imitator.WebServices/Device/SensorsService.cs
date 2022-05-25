@@ -506,7 +506,7 @@ http://smartboxcity.ru:8003/imitator/delete GET удаляет контейне�
 
                     foreach (var data in o_data.ResponseData.Objects)
                     {
-                        StaticBox.Sensors[data.SensorName] = data.Value;
+                        StaticBox.Sensors[data.SensorName] = data.Value.Replace(".", ",");
                     }
 
                     #region Initialize Static Box
