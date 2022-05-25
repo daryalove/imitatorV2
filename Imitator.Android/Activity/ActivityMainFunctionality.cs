@@ -1,16 +1,22 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Com.Karumi.Dexter;
+using Com.Karumi.Dexter.Listener;
+using Com.Karumi.Dexter.Listener.Multi;
 using Imitator.Android.Activity.MainFunctionality;
 using Imitator.Android.Activity.PersonalData;
 using Imitator.CommonData.DataModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Account;
 using Plugin.Settings;
+using System;
+using System.Collections.Generic;
 using AlertDialog = Android.App.AlertDialog;
 using Toast = Android.Widget.Toast;
 using ToastLength = Android.Widget.ToastLength;
@@ -29,11 +35,16 @@ namespace Imitator.Android.Activity
                 Xamarin.Essentials.Platform.Init(this, savedInstanceState);
                 SetContentView(Resource.Layout.PageMainFunctionality);
 
+                string[] permissions = { Manifest.Permission.AccessFineLocation, Manifest.Permission.AccessNetworkState};
+
+                Dexter.WithActivity(this).WithPermissions(permissions).WithListener(new CompositeMultiplePermissionsListener(new SamplePermissionListener(this))).Check();
+
                 Toolbar toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
                 SetSupportActionBar(toolbar);
                 SupportActionBar.Title = "Имитатор";
 
                 StaticBox.IMEI = CrossSettings.Current.GetValueOrDefault("IMEI", "");
+                StaticBox.DeviceId = Guid.Parse(CrossSettings.Current.GetValueOrDefault("DeviceId", Guid.Empty.ToString()));
 
                 BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.NavigationFormMainFunctionality);
 
@@ -163,38 +174,92 @@ namespace Imitator.Android.Activity
             }
         }
 
-        //public interface IBackButtonListener
-        //{
-        //    void OnBackPressed();
-        //}
-        //public override void OnBackPressed()
-        //{
-        //    if (StaticUser.IsUserOrMapActivity == true)
-        //    {
-        //        Android.App.AlertDialog.Builder alert = new Android.App.AlertDialog.Builder(this);
-        //        alert.SetTitle("Внимание!");
-        //        alert.SetMessage("Вы действительно хотите выйти со своего профиля ?");
-        //        alert.SetPositiveButton("Да", (senderAlert, args) =>
-        //        {
-        //            Leaveprofile();
-        //        });
-        //        alert.SetNegativeButton("Отмена", (senderAlert, args) =>
-        //        {
-        //        });
-        //        Dialog dialog = alert.Create();
-        //        dialog.Show();
-        //    }
-        //    else
-        //    {
-        //        base.OnBackPressed();
-        //        //var currentFragment = SupportFragmentManager.FindFragmentById(Resource.Id.framelayout);
-        //        //var listener = currentFragment as IBackButtonListener;
-        //        //if (listener != null)
-        //        //{
-        //        //    listener.OnBackPressed();
-        //        //    return;
-        //        //}
-        //    }
-        //}
+        private class SamplePermissionListener : Java.Lang.Object, IMultiplePermissionsListener
+        {
+            ActivityMainFunctionality activity;
+            public SamplePermissionListener(ActivityMainFunctionality activity)
+            {
+                this.activity = activity;
+            }
+
+            public void OnPermissionDenied(PermissionDeniedResponse p0)
+            {
+                //Snackbar.Make(activity.main_form, "Permission Denied", Snackbar.LengthShort).Show();
+            }
+
+            public void OnPermissionGranted(PermissionGrantedResponse p0)
+            {
+                //Snackbar.Make(activity.main_form, "Permission Granted", Snackbar.LengthShort).Show();
+            }
+
+            public void OnPermissionRationaleShouldBeShown(IList<PermissionRequest> p0, IPermissionToken p1)
+            {
+                p1.ContinuePermissionRequest();
+                throw new System.NotImplementedException();
+            }
+
+            public void OnPermissionsChecked(MultiplePermissionsReport p0)
+            {
+                if (p0.AreAllPermissionsGranted())
+                {
+
+                }
+
+                if (p0.IsAnyPermissionPermanentlyDenied)
+                {
+                    // show alert dialog navigating to Settings
+
+                }
+            }
+        }
     }
+
+    internal class MyDismissListener : Java.Lang.Object, IDialogInterfaceOnDismissListener
+    {
+        private IPermissionToken token;
+
+        public MyDismissListener(IPermissionToken token)
+        {
+            this.token = token;
+        }
+
+        public void OnDismiss(IDialogInterface dialog)
+        {
+            token.CancelPermissionRequest();
+        }
+    }
+
+    //public interface IBackButtonListener
+    //{
+    //    void OnBackPressed();
+    //}
+    //public override void OnBackPressed()
+    //{
+    //    if (StaticUser.IsUserOrMapActivity == true)
+    //    {
+    //        Android.App.AlertDialog.Builder alert = new Android.App.AlertDialog.Builder(this);
+    //        alert.SetTitle("Внимание!");
+    //        alert.SetMessage("Вы действительно хотите выйти со своего профиля ?");
+    //        alert.SetPositiveButton("Да", (senderAlert, args) =>
+    //        {
+    //            Leaveprofile();
+    //        });
+    //        alert.SetNegativeButton("Отмена", (senderAlert, args) =>
+    //        {
+    //        });
+    //        Dialog dialog = alert.Create();
+    //        dialog.Show();
+    //    }
+    //    else
+    //    {
+    //        base.OnBackPressed();
+    //        //var currentFragment = SupportFragmentManager.FindFragmentById(Resource.Id.framelayout);
+    //        //var listener = currentFragment as IBackButtonListener;
+    //        //if (listener != null)
+    //        //{
+    //        //    listener.OnBackPressed();
+    //        //    return;
+    //        //}
+    //    }
+    //}
 }

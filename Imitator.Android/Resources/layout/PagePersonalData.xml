@@ -13,55 +13,52 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         
+            <Button
+                    android:layout_width="55dp"
+                    android:id="@+id/Back"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/ic_menu_back"
+                    android:layout_height="40dp"/>
+
             <TextView
               android:gravity="center_horizontal"
               android:layout_alignParentTop="true"
-              android:layout_marginTop="10dp"
+              android:layout_marginTop="42dp"
               android:id="@+id/TxtAppName"
+              android:layout_below="@+id/Back"
               style="@style/TextHeaderStyle"
               android:text="@string/project_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"/>
+
              <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
+                android:id="@+id/view1"
                 android:layout_below="@+id/TxtAppName"
                 android:background="@color/ViewColor"/>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/TxtAppNameLayout"
-                    android:layout_marginTop="30dp"
-                    android:layout_below="@+id/TxtAppName"
-                    android:orientation="horizontal">
-              
-                <Button
-                    android:layout_width="16dp"
-                    android:id="@+id/Back"
-                    android:background="@android:color/white"
-                    android:layout_height="16dp"/>
-
-                <TextView
+            <TextView
                 android:textSize="30dp"
                 android:textColor="@color/TextColor"
                 android:id="@+id/TxtPersonalData"
+                android:layout_below="@+id/view1"
                 android:padding="2dp"
+                android:gravity="center_horizontal"
                 android:text="Личные данные"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            
-           
-            </LinearLayout>
 
              <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="6dp"
                 android:id="@+id/LinearLayoutFragment"
-                android:layout_below="@+id/TxtAppNameLayout">
+                android:layout_below="@+id/TxtPersonalData">
             
                  <FrameLayout 
                     android:id="@+id/FrameLayoutPersonalData"
@@ -77,7 +74,7 @@
                 android:layout_below="@+id/LinearLayoutFragment"
                 android:layout_marginBottom="40dp"
                 android:id="@+id/LinearLayoutChangePersonalDataType"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:orientation="horizontal">
@@ -116,9 +113,9 @@
                 android:background="@drawable/ButtonStyle"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
+                android:elevation="20dp"
+                android:layout_marginBottom="15dp"
                 android:layout_gravity="center_vertical"/>
-
         </RelativeLayout>
     
     </ScrollView>  

@@ -36,6 +36,7 @@ namespace Imitator.Android.Activity.MainFunctionality
 
         private int OddRowStyle = Resource.Style.OddRow;
         private int MainRowStyle = Resource.Style.MainRow;
+        private int TransRowStyle = Resource.Style.TransRow;
         private int RowsCount;
         private int ColumnCount;
 
@@ -55,7 +56,7 @@ namespace Imitator.Android.Activity.MainFunctionality
             { "9",doorState, "Роллета"},
             { "10",StaticBox.Longitude.ToString(), "Долгота"},
             { "11",StaticBox.Latitude.ToString(), "Широта"},
-            { "12",StaticBox.CreatedAtSensors.ToString(), "Дата/Время"}
+            { "12",StaticBox.CurrentDate.ToString(), "Дата/Время"}
         };
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -102,6 +103,10 @@ namespace Imitator.Android.Activity.MainFunctionality
                 if (i == 0)
                 {
                     tableRow = new TableRow(new ContextThemeWrapper(Activity, MainRowStyle));
+                } 
+                else if (i % 2 == 0)
+                {
+                    tableRow = new TableRow(new ContextThemeWrapper(Activity, TransRowStyle));
                 }
                 else
                 {

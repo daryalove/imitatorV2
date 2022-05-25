@@ -255,22 +255,27 @@ namespace Imitator.ConsoleTestApp
         /// <returns></returns>
         private async static Task SetGpsMain()
         {
-            //BoxLocation loc = new BoxLocation
-            //{
-            //    date = DateTime.Now,
-            //    lat1 = "42.3434",
-            //    lon1 = "33.001",
-            //    id = StaticBox.IMEI
-            //};
-            //var o_data = await LocationService.SetLocation(loc);
+            BoxLocation loc = new BoxLocation
+            {
+                date = DateTime.Now,
+                lat1 = "42.3434",
+                lon1 = "33.001",
+                id = StaticBox.IMEI
+            };
 
-            //if (o_data.Status == "0")
-            //{
+            using (var client = ClientHelper.GetClient(StaticUser.Token))
+            {
+                LocationService.InitializeClient(client);
+                var o_data = await LocationService.SetLocation(loc);
 
-            //    Console.WriteLine(o_data.Message);
-            //}
-            //else
-            //    Console.WriteLine("Something is wrong: " + o_data.Message);
+                if (o_data.Status == "OK")
+                {
+
+                    Console.WriteLine(o_data.Message);
+                }
+                else
+                    Console.WriteLine("Something is wrong: " + o_data.Message);
+            }
         }
 
         /// <summary>

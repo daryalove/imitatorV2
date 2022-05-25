@@ -162,7 +162,8 @@
                 android:background="@drawable/ButtonStyle"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="15dp"
+                android:elevation="10dp"
                 android:layout_gravity="center_vertical"/>
 
         </RelativeLayout>

@@ -1,21 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.App;
-using Android.Content;
-using Android.Graphics;
+using Android.Gms.Common;
+using Android.Gms.Location;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
 using Android.OS;
-using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Cheesebaron.SlidingUpPanel;
+using Imitator.CommonData.DataModels;
+using Imitator.CommonData.ViewModels;
+using Imitator.WebServices;
+using Imitator.WebServices.Device;
 
 namespace Imitator.Android.Activity.MainFunctionality
 {
     [Obsolete]
-    public class ActivityMap : Fragment
+    public class ActivityMap : Fragment, IOnMapReadyCallback
     {
+        private MapView mMapView = null;
+        private static TextView txtLongitude;
+        private static TextView txtLatitude;
+        private static TextView txtDateTime;
+        private static TextView txtId;
+
+        private const string SavedStateActionBarHidden = "saved_state_action_bar_hidden";
+
+        private GoogleMap GMap;
+
+        FusedLocationProviderClient fusedLocationProviderClient;
+        LocationRequest locationRequest;
+        LocationCallback locationCallback;
+
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -24,139 +41,240 @@ namespace Imitator.Android.Activity.MainFunctionality
         {
             var view = inflater.Inflate(Resource.Layout.PageMap, container, false);
 
-            //var layout = view.FindViewById<SlidingUpPanelLayout>(Resource.Id.sliding_client_layout);
+            var layout = view.FindViewById<SlidingUpPanelLayout>(Resource.Id.sliding_layout);
+            txtLongitude = view.FindViewById<TextView>(Resource.Id.txtLongitude);
+            txtLatitude = view.FindViewById<TextView>(Resource.Id.txtLatitude);
+            txtDateTime = view.FindViewById<TextView>(Resource.Id.txtDate);
+            txtId = view.FindViewById<TextView>(Resource.Id.txtBoxId);
 
-            //layout.AnchorPoint = 0.3f;
-            //layout.PanelExpanded += (s, e) => Log.Info(Tag, "PanelExpanded");
-            //layout.PanelCollapsed += (s, e) => Log.Info(Tag, "PanelCollapsed");
-            //layout.PanelAnchored += (s, e) => Log.Info(Tag, "PanelAnchored");
-            //layout.PanelSlide += (s, e) =>
-            //{
-            //    if (e.SlideOffset < 0.2)
-            //    {
-            //        //if (SupportActionBar.IsShowing)
-            //        //    SupportActionBar.Hide();
-            //    }
-            //    else
-            //    {
-            //        //if (!SupportActionBar.IsShowing)
-            //        //    SupportActionBar.Show();
-            //    }
-            //};
+            layout.AnchorPoint = 0.3f;
+            layout.PanelExpanded += (s, e) => Log.Info(Tag, "PanelExpanded");
+            layout.PanelCollapsed += (s, e) => Log.Info(Tag, "PanelCollapsed");
+            layout.PanelAnchored += (s, e) => Log.Info(Tag, "PanelAnchored");
+            layout.PanelSlide += (s, e) =>
+            {
+                if (e.SlideOffset < 0.2)
+                {
+                    //if (SupportActionBar.IsShowing)
+                    //    SupportActionBar.Hide();
+                }
+                else
+                {
+                    //if (!SupportActionBar.IsShowing)
+                    //    SupportActionBar.Show();
+                }
+            };
 
 
-            //MapsInitializer.Initialize(Activity);
-            //mMapView = view.FindViewById<MapView>(Resource.Id.FragmentMap);
+            MapsInitializer.Initialize(Activity);
+            mMapView = view.FindViewById<MapView>(Resource.Id.FragmentMapUser);
 
-            //switch (GooglePlayServicesUtil.IsGooglePlayServicesAvailable(Activity))
-            //{
-            //    case ConnectionResult.Success:
-            //        Toast.MakeText(Activity, "SUCCESS", ToastLength.Long).Show();
-            //        mMapView.OnCreate(savedInstanceState);
-            //        mMapView.GetMapAsync(this);
-            //        break;
-            //    case ConnectionResult.ServiceMissing:
-            //        Toast.MakeText(Activity, "ServiceMissing", ToastLength.Long).Show();
-            //        break;
-            //    case ConnectionResult.ServiceVersionUpdateRequired:
-            //        Toast.MakeText(Activity, "Update", ToastLength.Long).Show();
-            //        break;
-            //    default:
-            //        Toast.MakeText(Activity, GooglePlayServicesUtil.IsGooglePlayServicesAvailable(Activity), ToastLength.Long).Show();
-            //        break;
-            //}
+            switch (GooglePlayServicesUtil.IsGooglePlayServicesAvailable(Activity))
+            {
+                case ConnectionResult.Success:
+                    mMapView.OnCreate(savedInstanceState);
+                    mMapView.GetMapAsync(this);
+                    break;
+                case ConnectionResult.ServiceMissing:
+                    Toast.MakeText(Activity, "ServiceMissing", ToastLength.Long).Show();
+                    break;
+                case ConnectionResult.ServiceVersionUpdateRequired:
+                    Toast.MakeText(Activity, "Update", ToastLength.Long).Show();
+                    break;
+                default:
+                    Toast.MakeText(Activity, GooglePlayServicesUtil.IsGooglePlayServicesAvailable(Activity), ToastLength.Long).Show();
+                    break;
+            }
 
+            if (StaticBox.Sensors["Местоположение контейнера"] == "На складе" || StaticBox.Sensors["Местоположение контейнера"] == "У заказчика")
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
+                alert.SetTitle("Внимание !");
+                alert.SetMessage("Местоположение контейнера не изменяется, так как он находится на складе или у заказчика");
+                alert.SetPositiveButton("Закрыть", (senderAlert, args) =>
+                {
+                    Toast.MakeText(Activity, "Предупреждение было закрыто!", ToastLength.Short).Show();
+                });
+                Dialog dialog = alert.Create();
+                dialog.Show();
+            }
+            BuildLocationRequest();
+            BuildLocationCallBack();
+
+            fusedLocationProviderClient = LocationServices.GetFusedLocationProviderClient(Activity);
+
+            fusedLocationProviderClient.RequestLocationUpdates(locationRequest,
+                locationCallback, Looper.MyLooper());
 
             return view;
         }
 
-       
+        private void BuildLocationCallBack()
+        {
+            locationCallback = new AuthLocationCallBack(this);
+        }
 
-        //public void OnMapReady(GoogleMap googleMap)
-        //{
-        //    try
-        //    {
-        //        this.GMap = googleMap;
+        private void BuildLocationRequest()
+        {
+            locationRequest = new LocationRequest();
+            locationRequest.SetPriority(LocationRequest.PriorityBalancedPowerAccuracy);
+            if (StaticBox.Sensors["Местоположение контейнера"] != "На складе" || StaticBox.Sensors["Местоположение контейнера"] != "У заказчика")
+            {
+                locationRequest.SetInterval(1000);
+                locationRequest.SetFastestInterval(3000);
+                locationRequest.SetSmallestDisplacement(10f);
+            }
+        }
 
-        //        LatLng location = new LatLng(47.264998, 39.720358);
-        //        PolylineOptions rectOptions = new PolylineOptions()
-        //        {
 
-        //        };
-        //        rectOptions.Geodesic(true);
-        //        rectOptions.InvokeWidth(1);
-        //        rectOptions.InvokeColor(Color.Blue);
 
-        //        for (int i = 0; i < 1; i++)
-        //        {
-        //            var latitude = 47.264998;
-        //            var longitude = 39.720358;
+        public void OnMapReady(GoogleMap googleMap)
+        {
+            try
+            {
+                this.GMap = googleMap;
 
-        //            LatLng new_location = new LatLng(
-        //               latitude,
-        //                longitude);
+                if (StaticBox.Latitude == 0 || StaticBox.Longitude == 0)
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(Activity);
+                    alert.SetTitle("Внимание !");
+                    alert.SetMessage("Местоположение контейнера не изменяется, так как на телефоне отключен GPS.\n Включите, пожалуйста, GPS.");
+                    alert.SetPositiveButton("Закрыть", (senderAlert, args) =>
+                    {
+                        Toast.MakeText(Activity, "Предупреждение было закрыто!", ToastLength.Short).Show();
+                    });
+                    Dialog dialog = alert.Create();
+                    dialog.Show();
+                    return;
+                }
+                double latitude = StaticBox.Latitude;
+                double longitude = StaticBox.Longitude;
 
-        //            rectOptions.Add(new_location);
+                LatLng location = new LatLng(latitude, longitude);
+                //PolylineOptions rectOptions = new PolylineOptions()
+                //{
 
-        //            if (i == 0)
-        //            {
-        //                MarkerOptions markerOpt1 = new MarkerOptions();
-        //                //location = new LatLng(latitude, longitude);
+                //};
+                //rectOptions.Geodesic(true);
+                //rectOptions.InvokeWidth(1);
+                //rectOptions.InvokeColor(Color.Blue);
 
-        //                markerOpt1.SetPosition(new LatLng(latitude, longitude));
-        //                markerOpt1.SetTitle("Пункт отправления\n" + "Орбительная ул.");
-        //                //markerOpt1.SetSnippet(StaticOrder.Inception_address);
+                MarkerOptions markerOpt1 = new MarkerOptions();
+                //location = new LatLng(latitude, longitude);
 
-        //                var bmDescriptor = BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueBlue);
-        //                markerOpt1.InvokeIcon(bmDescriptor);
+                markerOpt1.SetPosition(location);
+                markerOpt1.SetTitle("Контейнер здесь");
+                //markerOpt1.SetSnippet(StaticOrder.Inception_address);
 
-        //                googleMap.AddMarker(markerOpt1);
+                var bmDescriptor = BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueBlue);
+                markerOpt1.InvokeIcon(bmDescriptor);
 
-        //                continue;
-        //            }
-        //            //else if (i == 1)
-        //            //{
-        //            //    MarkerOptions markerOpt1 = new MarkerOptions();
-        //            //    //location = new LatLng(latitude, longitude);
+                googleMap.AddMarker(markerOpt1);
 
-        //            //    markerOpt1.SetPosition(new LatLng(latitude, longitude));
-        //            //    markerOpt1.SetTitle("Пункт назначения\n" + "Горизонт");
-        //            //    //markerOpt1.SetSnippet(StaticOrder.Destination_address);
+               // googleMap.AddPolyline(rectOptions);
 
-        //            //    var bmDescriptor = BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueRed);
-        //            //    markerOpt1.InvokeIcon(bmDescriptor);
+                CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+                builder.Target(location);
+                builder.Zoom(10);
+                builder.Bearing(0);
+                builder.Tilt(65);
 
-        //            //    googleMap.AddMarker(markerOpt1);
+                CameraPosition cameraPosition = builder.Build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 
-        //            //    continue;
-        //            //}
-        //            MarkerOptions markerOptions = new MarkerOptions();
+                //googleMap.UiSettings.ZoomControlsEnabled = true;
+                //googleMap.UiSettings.CompassEnabled = true;
+                googleMap.MoveCamera(cameraUpdate);
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
+            }
+        }
 
-        //            markerOptions.SetPosition(new_location);
-        //            markerOptions.SetTitle(i.ToString());
-        //            googleMap.AddMarker(markerOptions);
+        internal class AuthLocationCallBack : LocationCallback // !!!!
+        {
+            private ActivityMap activityUserBox;
 
-        //        }
+            public AuthLocationCallBack(ActivityMap activityUserBoxy)
+            {
+                this.activityUserBox = activityUserBoxy;
+            }
 
-        //        googleMap.AddPolyline(rectOptions);
+            public override void OnLocationResult(LocationResult result)
+            {
+                base.OnLocationResult(result);
 
-        //        CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
-        //        builder.Target(location);
-        //        builder.Zoom(10);
-        //        builder.Bearing(0);
-        //        builder.Tilt(65);
+                try
+                {
+                    if (result == null)
+                    {
+                        return;
+                    }
 
-        //        CameraPosition cameraPosition = builder.Build();
-        //        CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+                    StaticBox.Latitude = result.LastLocation.Latitude;
+                    StaticBox.Longitude = result.LastLocation.Longitude;
+                    StaticBox.CurrentDate = DateTime.Now;
 
-        //        //googleMap.UiSettings.ZoomControlsEnabled = true;
-        //        //googleMap.UiSettings.CompassEnabled = true;
-        //        googleMap.MoveCamera(cameraUpdate);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
-        //    }
-        //}
+                    txtLongitude.Text = result.LastLocation.Longitude.ToString();
+                    txtLatitude.Text = result.LastLocation.Latitude.ToString();
+                    txtDateTime.Text = StaticBox.CurrentDate.ToString();
+                    txtId.Text = StaticBox.IMEI;
+                   
+                    PostGeoData();
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(Application.Context, ex.Message, ToastLength.Short).Show();
+                }
+            }
+
+            private async void PostGeoData()
+            {
+                using (var client = ClientHelper.GetClient(StaticUser.Token))
+                {
+                    PositionModel model = new PositionModel
+                    {
+                        CurrentDate = DateTime.Now.ToString(),
+                        Latitude = StaticBox.Latitude,
+                        Longitude = StaticBox.Longitude,
+                        DeviceId = StaticBox.DeviceId
+                    };
+
+                    LocationService.InitializeClient(client);
+                    var o_data = await LocationService.SetGPS(model);
+
+                    Toast.MakeText(Application.Context, o_data.SuccessInfo, ToastLength.Long).Show();
+                }
+            }
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            if (mMapView != null)
+                mMapView.OnResume();
+        }
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+            if (mMapView != null)
+                mMapView.OnLowMemory();
+        }
+
+        public override void OnPause()
+        {
+            base.OnPause();
+            if (mMapView != null)
+                mMapView.OnPause();
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (mMapView != null)
+                mMapView.OnDestroy();
+        }
     }
 }

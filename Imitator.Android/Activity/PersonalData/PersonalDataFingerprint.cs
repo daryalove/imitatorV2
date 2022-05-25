@@ -36,6 +36,17 @@ namespace Imitator.Android.Activity.PersonalData
                 AccessEvent = Convert.ToBoolean(CrossSettings.Current.GetValueOrDefault("AccessFingerprintAuthorisation", string.Empty));
 
                 ChangeAccessFingerprintAuthorisation.Checked = AccessEvent ? true : false;
+
+                if (AccessEvent)
+                {
+                    TextAccessFingerprintAuthorisation.Text = "Авторизация с помощью отпечатка пальца разрешена";
+                    TextAccessFingerprintAuthorisation.SetTextColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.BackgroundColor)));
+                }    
+                else
+                {
+                    TextAccessFingerprintAuthorisation.Text = "Авторизация с помощью отпечатка пальца запрещена";
+                    TextAccessFingerprintAuthorisation.SetTextColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.EventNotAllowColor)));
+                }
             }
 
             return view;

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Imitator.WebServices.Device
@@ -15,9 +14,8 @@ namespace Imitator.WebServices.Device
     {
         private static HttpClient _httpClient;
 
-        private static string setLocationApi = "http://smartboxcity.ru:8003/imitator/geo";
-
-        private static string setLocationIotApi = "http://iot-tmc-cen.1gb.ru/api/container/setcontainerlocation?id=";
+        //private static string setLocationApi = "http://smartboxcity.ru:8003/imitator/geo";
+        private static string setLocationIotApi = "container/setcontainerlocation";
         
         /// <summary>
         /// Инициализация экземпляра клиента
@@ -28,6 +26,7 @@ namespace Imitator.WebServices.Device
             _httpClient = client;
         }
 
+        [Obsolete]
         /// <summary>
         /// Обновление GPS координат на стороне промежуточного сервера.
         /// </summary>
@@ -92,23 +91,18 @@ namespace Imitator.WebServices.Device
             }
         }
 
-        #region Obsolete
         /// <summary>
         /// Обновление координат на стороне сервера Шахт.
         /// </summary>
         /// <param name="gpsLocation"></param>
         /// <returns></returns>
-        private static async Task<AuthApiData<BaseResponseObject>> SetLocation(BoxLocation gpsLocation)
+        public static async Task<AuthApiData<BaseResponseObject>> SetLocation(BoxLocation gpsLocation)
         {
             try
             {
                 int signal = 0;
 
-                var myHttpClient = new HttpClient();
                 // var uri = new Uri(setLocationIotApi + gpsLocation.id + "&lat1=" + gpsLocation.lat1 + "&lon1=" + gpsLocation.lon1 + "&date=" + gpsLocation.date);
-                var uri2 = new Uri(setLocationApi);
-
-
                 //json структура.
                 FormUrlEncodedContent formUrlEncodedContent = new FormUrlEncodedContent(new Dictionary<string, string>
                     {
@@ -120,7 +114,7 @@ namespace Imitator.WebServices.Device
                 var formContent = formUrlEncodedContent;
 
                 // HttpResponseMessage response = await myHttpClient.PostAsync(uri.ToString(), formContent);// !!!!
-                HttpResponseMessage responseFromAnotherServer = await myHttpClient.PostAsync(uri2.ToString(), formContent);
+                HttpResponseMessage responseFromAnotherServer = await _httpClient.PostAsync(setLocationIotApi, formContent);
                 AuthApiData<BaseResponseObject> o_data = new AuthApiData<BaseResponseObject>();
 
                 //string s_result;
@@ -165,7 +159,6 @@ namespace Imitator.WebServices.Device
                 };
                 return o_d;
             }
-            #endregion
         
         }
     }

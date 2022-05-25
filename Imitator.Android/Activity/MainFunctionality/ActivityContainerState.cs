@@ -168,6 +168,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                     {
                         Toast.MakeText(Activity, o_data.Message, ToastLength.Long).Show();
 
+                        StaticBox.CurrentDate = DateTime.Now;
                         StaticBox.CameraOpenOrNo = 1;
 
                         ActivityPhotographicRecording ContentPhotographicRecording = new ActivityPhotographicRecording();

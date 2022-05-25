@@ -236,6 +236,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                         StaticBox.Sensors["Освещенность"] = sensors.Find(w => w.SensorName.Text == LightName).CurrentValue.Text;
                         StaticBox.Sensors["Уровень заряда аккумулятора"] = sensors.Find(w => w.SensorName.Text == BatteryName).CurrentValue.Text;
                         StaticBox.Sensors["Уровень сигнала"] = "-8";
+                        StaticBox.CurrentDate = DateTime.Now;
                     }
                     else
                         Toast.MakeText(Activity, "Не получилось изменить значения датчиков. " +
