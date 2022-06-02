@@ -83,7 +83,6 @@ namespace Imitator.Android.Services
                 Log.Debug(TAG, ex.Message);
                 Toast.MakeText(Application.Context, TAG + ex.Message, ToastLength.Short).Show();
             }
-
         }
 
         public override bool OnStopJob(IJobParameters jobParameters)

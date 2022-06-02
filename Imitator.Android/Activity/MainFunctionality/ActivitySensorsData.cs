@@ -23,7 +23,6 @@ namespace Imitator.Android.Activity.MainFunctionality
     {
         #region Объявление переменных пользовательсокго интерфейса
 
-        //private ScrollView scrollView;
         private View view;
 
         private ImageView SelectedSensorImage;
@@ -48,8 +47,8 @@ namespace Imitator.Android.Activity.MainFunctionality
         private string[] mViews = new string[2] { "0", "0" };
         private string Unit;
         private List<Sensor> sensors = new List<Sensor>();
-        private bool AccessToSeekBar = false; // При выполнении кода в функиции ChangeSeekBarCharacteristic() 
-        //программа обращается к методу SeekBar_ProgressChanged и меняет значение поля SelectedSensorValue.
+        private bool AccessToSeekBar = false; 
+        
         public override void OnCreate(Bundle savedInstanceState)
         {           
             base.OnCreate(savedInstanceState);
@@ -57,8 +56,7 @@ namespace Imitator.Android.Activity.MainFunctionality
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             view = inflater.Inflate(Resource.Layout.PageSensorsData, container, false);
-            //scrollView = view.FindViewById<ScrollView>(Resource.Id.ScrollViewPageSensorsData);
-
+           
             try
             {
                 #region Инициализация переменных пользовательсокго интерфейса
@@ -136,40 +134,17 @@ namespace Imitator.Android.Activity.MainFunctionality
                 seekBar.SetOnTouchListener(this);
                 seekBar.ProgressChanged += SeekBar_ProgressChanged;
 
-                // Если данные с сервера уже были получены, не отправлять запрос на сервер, а воспользоваться имеющимися в статическом классе данными
+               
                 if (OnNullOrEmptySensorsValueVerification())
                     GetSensorsData();
                 else
                     SetSensorsValue(StaticBox.Sensors["Вес груза"], StaticBox.Sensors["Температура"],
                         StaticBox.Sensors["Влажность"], StaticBox.Sensors["Освещенность"], StaticBox.Sensors["Уровень заряда аккумулятора"]);
-
-                //seekBar.CenterClicked += (s, e) =>
-                //{
-                //    CircularSeekBar view = (CircularSeekBar)e.P0;
-                //    float progress = e.P1;
-                //    Snackbar.Make(view, "Rest", Snackbar.LengthShort).Show();
-                //    view.Progress = 0;
-                //};
             }
             catch (System.Exception ex)
             {
                 Toast.MakeText(Activity, ex.Message, ToastLength.Long).Show();
             }
-        
-
-            //seekBar.ProgressChanged += (s, e) =>
-            //{
-            //    SelectedSensorValue.Text = seekBar.Progress.ToString();
-            //    //CircularSeekBar view = e.P0;
-            //    //float progress = e.P1;
-            //    //bool fromUser = e.P2;
-            //    //if (progress < 33)
-            //    //    view.RingColor = Color.Green;
-            //    //else if (progress < 66)
-            //    //    view.RingColor = Color.Blue;
-            //    //else
-            //    //    view.RingColor = Color.Red;
-            //};
 
             return view;
         }
@@ -315,15 +290,6 @@ namespace Imitator.Android.Activity.MainFunctionality
             {
                 SelectedSensorValue.Text = Math.Round(seekBar.Progress, 1).ToString() + Unit;
             }            
-            //CircularSeekBar view = e.P0;
-            //float progress = e.P1;
-            //bool fromUser = e.P2;
-            //if (progress < 33)
-            //    view.RingColor = Color.Green;
-            //else if (progress < 66)
-            //    view.RingColor = Color.Blue;
-            //else
-            //    view.RingColor = Color.Red;
         }
 
         private void BtnReduceSensorValue_Click(object sender, EventArgs e)
@@ -408,17 +374,11 @@ namespace Imitator.Android.Activity.MainFunctionality
             AccessToSeekBar = false;
             var item = sensors.Find(x => x.SensorName.Text == mViews[0]);
             item.linearLayout.SetBackgroundResource(Resource.Color.TransparentColor);
-            //Так как в переменной SelectedSensorValue.Text значению датчика указывается вместе с 
-            // мерой измерение, её необходимо убрать, чтобы на сервер отправлялись корректные значения датчиков
             item.CurrentValue.Text = SelectedSensorValue.Text;
         }
 
         public bool OnTouch(View v, MotionEvent e)
         {
-            //if (e.Action == MotionEventActions.Down)
-            //    scrollView.Enabled = false;
-            //else if (e.Action == MotionEventActions.Up)
-            //    scrollView.Enabled = true;
             return false;
         }
 
