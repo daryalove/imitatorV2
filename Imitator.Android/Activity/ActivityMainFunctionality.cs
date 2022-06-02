@@ -11,6 +11,7 @@ using Com.Karumi.Dexter.Listener;
 using Com.Karumi.Dexter.Listener.Multi;
 using Imitator.Android.Activity.MainFunctionality;
 using Imitator.Android.Activity.PersonalData;
+using Imitator.Android.Services;
 using Imitator.CommonData.DataModels;
 using Imitator.WebServices;
 using Imitator.WebServices.Account;
@@ -44,7 +45,7 @@ namespace Imitator.Android.Activity
                 SupportActionBar.Title = "Имитатор";
 
                 StaticBox.IMEI = CrossSettings.Current.GetValueOrDefault("IMEI", "");
-                StaticBox.DeviceId = Guid.Parse(CrossSettings.Current.GetValueOrDefault("DeviceId", Guid.Empty.ToString()));
+                StaticBox.DeviceId = Guid.Parse("DF5BE96A-8936-4FA6-B0A3-679048177600");//Guid.Parse(CrossSettings.Current.GetValueOrDefault("DeviceId", Guid.Empty.ToString()));
 
                 BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.NavigationFormMainFunctionality);
 
@@ -133,6 +134,7 @@ namespace Imitator.Android.Activity
                         {
                             try
                             {
+                                FirebaseService.StopTracking();
                                 LogOutMethod();                                  
                             }
                             catch (System.Exception ex)

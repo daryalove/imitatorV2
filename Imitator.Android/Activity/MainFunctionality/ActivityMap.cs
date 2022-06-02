@@ -219,7 +219,7 @@ namespace Imitator.Android.Activity.MainFunctionality
                     txtLongitude.Text = result.LastLocation.Longitude.ToString();
                     txtLatitude.Text = result.LastLocation.Latitude.ToString();
                     txtDateTime.Text = StaticBox.CurrentDate.ToString();
-                    txtId.Text = StaticBox.IMEI;
+                    txtId.Text = "6c7fk81d6592569e";
                    
                     PostGeoData();
                 }

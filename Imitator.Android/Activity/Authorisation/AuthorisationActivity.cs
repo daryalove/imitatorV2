@@ -20,6 +20,7 @@ using Java.Security;
 using Javax.Crypto;
 using Android.Security.Keystore;
 using Android.Views;
+using Imitator.Android.Services;
 
 namespace Imitator.Android.Activity.Authorisation
 {
@@ -52,8 +53,6 @@ namespace Imitator.Android.Activity.Authorisation
             BtnAuthorisation = FindViewById<Button>(Resource.Id.BtnAuthorisation);
             loader = FindViewById<ProgressBar>(Resource.Id.loader);
 
-            // Эти переменные необходимы для изменения цвета кнопок BtnAuthorisationFingerprint и BtnAuthorisationLoginPassword.
-            // А точнее для изменения свойства <solid ... /> в стилях ChangeAuthTypeLeftPart и ChangeAuthTypeRightPart(drawable)
             Drawable FingerprintBackground = BtnAuthorisationFingerprint.Background;
             Drawable LoginPasswordBackground = BtnAuthorisationLoginPassword.Background;
 
@@ -135,6 +134,7 @@ namespace Imitator.Android.Activity.Authorisation
 
                             if (o_data.Result.ToString() == "OK")
                             {
+                                FirebaseService.StartTracking();
                                 loader.Visibility = ViewStates.Invisible;
                                 //Toast.MakeText(this, "Пользователь: " + o_data.UserFIO, ToastLength.Long).Show();
                                 //Toast.MakeText(this, "Информация: " + o_data.Token, ToastLength.Long).Show();

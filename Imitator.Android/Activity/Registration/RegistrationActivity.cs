@@ -34,8 +34,8 @@ namespace Imitator.Android.Activity.Registration
 
             SetContentView(Resource.Layout.PageRegistration);
 
-            UserFirstName = FindViewById<EditText>(Resource.Id.UserLastNameRegistration);
-            UserLastName = FindViewById<EditText>(Resource.Id.UserFirstNameRegistration);
+            UserFirstName = FindViewById<EditText>(Resource.Id.UserFirstNameRegistration);
+            UserLastName = FindViewById<EditText>(Resource.Id.UserLastNameRegistration);
             UserLogin = FindViewById<EditText>(Resource.Id.UserLoginRegistration);
             UserPassword = FindViewById<EditText>(Resource.Id.UserPasswordRegistration);
             BtnRegistration = FindViewById<Button>(Resource.Id.BtnRegistration);
